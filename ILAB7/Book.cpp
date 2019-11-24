@@ -2,17 +2,21 @@
 #include "Util.h"
 #include <stdexcept>
 
+/* Instantiates a Book with empty fields/default values */
 Book::Book() {
-	title = author = sphere = "";
+	title = '\0';
+	author = '\0';
+	sphere = '\0';
 	publicationYear = 1970;
 	currentlyAvailable = 0;
 }
 
+/* Instantiates a Book with recieved arguments */
 Book::Book(
-	std::string author = "",
-	std::string title = "",
-	date_yr publicationYear = 1970,
-	std::string sphere = "",
+	String author = '\0',
+	String title = '\0',
+	date_y publicationYear = 1970,
+	String sphere = '\0',
 	unsigned int currentlyAvailable = 0
 ) {
 	this->author = author;
@@ -22,6 +26,7 @@ Book::Book(
 	this->currentlyAvailable = currentlyAvailable;
 }
 
+/* Instantiates a copy of the Book @book */
 Book::Book(const Book& book) {
 	author = book.author;
 	title = book.title;
@@ -30,51 +35,68 @@ Book::Book(const Book& book) {
 	currentlyAvailable = book.currentlyAvailable;
 }
 
+/* Returns true if Books share the same author, title and publication year
+   (not sphere though) */
 bool operator==(const Book& b1, const Book& b2) {
 	return b1.author == b2.author
 		&& b1.title == b2.title
 		&& b1.publicationYear == b2.publicationYear;
 }
 
+/* Returns true if Books have different authors or titles or publication years
+   (not spheres though) */
 bool operator!=(const Book& b1, const Book& b2) {
 	return b1.author != b2.author
 		|| b1.title != b2.title
 		|| b1.publicationYear != b2.publicationYear;
 }
 
+/* Decrements the available amount of the first Book, if the Books are the same.
+   Return the first Book otherwise */
 Book operator-(const Book& b1, const Book& b2) {
 	if (b1 != b2) return b1;
 	return Book(b1.author, b1.title, b1.publicationYear, b1.sphere, b1.currentlyAvailable - b2.currentlyAvailable);
 }
 
+/* Increments the available amount of the first Book, if the Books are the same.
+   Return the first Book otherwise */
 Book Book::operator+(const Book& book) {
 	if (*this != book) return *this;
 	return Book(author, title, publicationYear, sphere, currentlyAvailable + book.currentlyAvailable);
 }
 
+/* Returns true if the first Book has less available copies
+   (does not check for Book equality) */
 bool operator<(const Book& b1, const Book& b2) {
 	return b1.currentlyAvailable < b2.currentlyAvailable;
 }
 
+/* Return true if the first Book has more available copies
+   (does not check for Book equality */
 bool Book::operator>(const Book& b) {
 	return currentlyAvailable > b.currentlyAvailable;
 }
 
-void Book::operator=(const unsigned int amount) {
+/* Sets the amount of avaialable copies to the value on the right of equals */
+Book& Book::operator=(const unsigned int amount) {
 	currentlyAvailable = amount;
+	return *this;
 }
 
+/* Incerements the amount of available copies of this Book by 1 (postfix version) */
 Book operator++(Book& b) {
 	Book pb = b;
 	b.currentlyAvailable++;
 	return pb;
 }
 
+/* Incerements the amount of available copies of this Book by 1 (prefix version) */
 void Book::operator++() {
 	currentlyAvailable++;
 	return;
 }
 
+/* Outputs information about this Book into the stream &out as table row */
 std::ostream& operator<<(std::ostream& out, const Book& b) {
 	out <<
 		std::setw(25) << b.author <<
@@ -85,18 +107,14 @@ std::ostream& operator<<(std::ostream& out, const Book& b) {
 	return out;
 }
 
-/* Reads Book object properties from input stream "in" consecutively, each on a separate line
+/* Reads Book object properties from input stream &in consecutively, each on a separate line
    Throws invalid_argument exception if input format is invalid.*/
 std::istream& operator>>(std::istream& in, Book& b) {
 
-	getline(in, b.author, '\n');
-	if (in.fail())
-		throw std::invalid_argument("Wrong input stream format (author name)");
+	getline(in, b.author);
 	Util::capitalizeFirstLetters(b.author);
 
-	getline(in, b.title, '\n');
-	if (in.fail())
-		throw std::invalid_argument("Wrong input stream format (book title)");
+	getline(in, b.title);
 	Util::capitalizeFirstLetters(b.title);
 
 	in >> b.publicationYear;
@@ -106,9 +124,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 		b.publicationYear = 1970;
 	in.ignore(INT_MAX, '\n');
 
-	getline(in, b.sphere, '\n');
-	if (in.fail())
-		throw std::invalid_argument("Wrong input stream format (book sphere)");
+	getline(in, b.sphere);
 
 	in >> b.currentlyAvailable;
 	if (in.fail())

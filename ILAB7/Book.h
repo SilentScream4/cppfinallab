@@ -1,25 +1,27 @@
 #pragma once
-#include <string>
 #include <iomanip>
-#include <string>
+//#include <string>
 
-typedef unsigned int date_yr;
+#include "String.h"
+
+typedef unsigned int date_y;
 
 class Book {
 
 private:
 
-	std::string author;
-	std::string title;
-	date_yr publicationYear;
-	std::string sphere;
+	String author;
+	String title;
+	date_y publicationYear;
+	String sphere;
 	unsigned int currentlyAvailable;
 
 public:
 
 	Book();
-	Book(std::string, std::string, date_yr, std::string, unsigned int);
+	Book(String, String, date_y, String, unsigned int);
 	Book(const Book&);
+	~Book() {}
 
 	friend bool operator==(const Book&, const Book&);
 	friend bool operator!=(const Book&, const Book&);
@@ -30,7 +32,7 @@ public:
 	friend bool operator<(const Book&, const Book&);
 	bool operator>(const Book&);
 
-	void operator=(const unsigned int);
+	Book& operator=(const unsigned int);
 
 	friend Book operator++(Book& b);
 	void operator++();

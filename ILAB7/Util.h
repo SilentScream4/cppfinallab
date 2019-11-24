@@ -1,9 +1,12 @@
 #pragma once
-#include <string>
+#include "String.h"
 
 namespace Util {
 
-	void trim(std::string&);
-	void capitalizeFirstLetters(std::string&);
+	/* Trims excessive white spaces (double spaces, leading and trailing spaces)*/
+	void trim(String&);
+
+	/* Removes excessive spaces, makes first letters uppercase, all others lowercase*/
+	void capitalizeFirstLetters(String&);
 
 }
