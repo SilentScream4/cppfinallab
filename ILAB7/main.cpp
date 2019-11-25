@@ -34,26 +34,36 @@ void outputSpheresList(std::ostream&, ResizableArray<String>&);
 
 int main(int argc, char** argv) {
 
-	std::cout << "Enter text file name to read book database from (with .txt): ";
+	std::fstream fin;
 	char* fn = new char[255];
-	std::cin >> fn;
+	while (!fin.is_open())
+	{
+		do {
+			std::cout << "Enter text file name to read book database from (with .txt): ";
+			std::cin.clear();
+			std::cin >> fn;
+		} while (std::cin.fail());
 
-	std::fstream fin(fn);
-	if (!fin.is_open()) {
-		std::cerr << "Can't open file " << fn << std::endl;
-		return -1;
+		fin.open(fn);
+		if (!fin.is_open())
+			std::cerr << "Can't open file " << fn << std::endl;
 	}
+	delete[] fn;
 
-	std::cout << "Use a delimiter (symbol separating books in input file? (y\n): ";
 	char yn, delim = '\n';
 	do {
+		std::cout << "Use a delimiter (symbol separating books in input file? (y\n): ";
+		std::cin.clear();
 		std::cin >> yn;
-	} while (yn != 'y' && yn != 'n');
+	} while (std::cin.fail() || yn != 'y' && yn != 'n');
 	if (yn == 'y') {
-		std::cout << "Enter delimiting character (it shouldn't be in the actual text, every book will start with it, but it will be ignored when reading): ";
-		std::cin >> delim;
+		do {
+			std::cout << "Enter delimiting character (it shouldn't be in the actual text, every book will start with it, but it will be ignored when reading): ";
+			std::cin.clear();
+			std::cin >> delim;
+		} while (std::cin.fail() || isalpha(delim) || isalnum(delim));
 	}
-	
+
 	ResizableArray<Book> books = ResizableArray<Book>();
 	while (!fin.eof()) {
 
@@ -69,20 +79,21 @@ int main(int argc, char** argv) {
 
 		catch (std::exception exc) {
 			std::cerr << exc.what() << std::endl;
-			std::cout << "Continue reading file? (many more exceptions are likely to pop up) (y\n): ";
 			char yn;
 			do {
+				std::cout << "Continue reading file? (many more exceptions are likely to pop up) (y\n): ";
+				std::cin.clear();
 				std::cin >> yn;
-			} while (yn != 'y' && yn != 'n');
+			} while (std::cin.fail() || yn != 'y' && yn != 'n');
 			if (yn == 'y') fin.ignore(INT_MAX, delim);
 			else return -2;
 		}
 
 	}
 
-	std::ofstream fout("booksTable.txt");
+	std::ofstream fout("bestAvailability.txt");
 	if (!fout.is_open()) {
-		std::cerr << "Can't create output file" << std::endl;
+		std::cerr << "Can't create output file bestAvailability.txt"<< std::endl;
 		return -3;
 	}
 
@@ -92,16 +103,31 @@ int main(int argc, char** argv) {
 		fout << '\n';
 	}
 	catch (std::invalid_argument exc) {
-		std::cerr << exc.what() << std::endl;
+		fout << exc.what() << std::endl;
+	}
+
+	fout.close();
+	fout.open("booksTable.txt");
+	if (!fout.is_open()) {
+		std::cerr << "Can't create output file booksTable.txt" << std::endl;
+		return -3;
 	}
 
 	sort(books);
 	outputBooksTable(fout, books);
 
+	fout.close();
+	fout.open("spheresList.txt");
+	if (!fout.is_open()) {
+		std::cerr << "Can't create output file spheresList.txt" << std::endl;
+		return -3;
+	}
+
 	auto spheres = extractSpheres(books);
 	sort(spheres);
-	outputSpheresList(fout,spheres);
+	outputSpheresList(fout, spheres);
 
+	fout.close();
 	return 0;
 }
 
@@ -172,8 +198,8 @@ void outputBooksTable(std::ostream& out, ResizableArray<Book>& books) {
 ResizableArray<String>& extractSpheres(ResizableArray<Book>& books) {
 	int c = books.getSize();
 	ResizableArray<String>* spheres = new ResizableArray<String>(c);
-	for(int i=0;i<c;++i)
-		if(!spheres->contains(books[i].getSphere()))
+	for (int i = 0; i < c; ++i)
+		if (!spheres->contains(books[i].getSphere()))
 			spheres->add(books[i].getSphere());
 	return *spheres;
 }
