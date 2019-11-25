@@ -24,9 +24,13 @@ template<class T>
 void sort(T*, int);
 
 /* Outputs a table to the stream &out from the books in vector &books			 */
-void outputTable(std::ostream& out, ResizableArray<Book>&);
+void outputBooksTable(std::ostream& out, ResizableArray<Book>&);
 
+/* Returns a reference to Resizable Array of unique spheres in @books 			 */
+ResizableArray<String>& extractSpheres(ResizableArray<Book>&);
 
+/* Outputs &spheres to the stream &out											 */
+void outputSpheresList(std::ostream&, ResizableArray<String>&);
 
 int main(int argc, char** argv) {
 
@@ -85,13 +89,18 @@ int main(int argc, char** argv) {
 	try {
 		fout << "Book with most available copies is:\n";
 		fout << findBestAvailability(books);
+		fout << '\n';
 	}
 	catch (std::invalid_argument exc) {
 		std::cerr << exc.what() << std::endl;
 	}
 
 	sort(books);
-	outputTable(fout, books);
+	outputBooksTable(fout, books);
+
+	auto spheres = extractSpheres(books);
+	sort(spheres);
+	outputSpheresList(fout,spheres);
 
 	return 0;
 }
@@ -147,7 +156,7 @@ void sort(T* arr, int n) {
 }
 
 /* Outputs a table to the stream &out from the books in vector &books*/
-void outputTable(std::ostream& out, ResizableArray<Book>& books) {
+void outputBooksTable(std::ostream& out, ResizableArray<Book>& books) {
 	out <<
 		std::setw(25) << "Author" <<
 		std::setw(50) << "Title" <<
@@ -157,4 +166,21 @@ void outputTable(std::ostream& out, ResizableArray<Book>& books) {
 		std::endl;
 	for (int i = 0; i < books.getSize(); ++i)
 		out << books[i];
+}
+
+/* Returns a reference to Resizable Array of unique spheres in &books */
+ResizableArray<String>& extractSpheres(ResizableArray<Book>& books) {
+	int c = books.getSize();
+	ResizableArray<String>* spheres = new ResizableArray<String>(c);
+	for(int i=0;i<c;++i)
+		if(!spheres->contains(books[i].getSphere()))
+			spheres->add(books[i].getSphere());
+	return *spheres;
+}
+
+/* Outputs &spheres to the stream &out */
+void outputSpheresList(std::ostream& out, ResizableArray<String>& spheres) {
+	out << std::setw(20) << "Covered spheres:" << '\n';
+	for (int i = 0; i < spheres.getSize(); ++i)
+		out << std::setw(20) << spheres[i] << '\n';
 }

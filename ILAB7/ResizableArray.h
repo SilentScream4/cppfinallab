@@ -23,7 +23,7 @@ public:
 	/* Returns true if this Resizable Array is empty */
 	bool isEmpty();
 	/* Return true if this elem is present in this Resizable Array */
-	bool contains(T& elem);
+	bool contains(const T& elem);
 
 	/* Adds another element of type T at the end of the array,
    extends ResizableArray if necessary */

@@ -24,7 +24,7 @@ ResizableArray<T>::ResizableArray() {
 /* Instantiates a Resizable Array able to hold @size elements of type T */
 template<class T>
 ResizableArray<T>::ResizableArray(const size_t size) {
-	this.size = size / resizeStep;
+	this->size = size / resizeStep;
 	filled = 0;
 	resize();
 }
@@ -33,7 +33,7 @@ ResizableArray<T>::ResizableArray(const size_t size) {
    filled with @size elements from *arr */
 template<class T>
 ResizableArray<T>::ResizableArray(const T* arr, const size_t size) {
-	this.size = size / resizeStep + 1;
+	this->size = size / resizeStep + 1;
 	filled = size;
 	resize();
 	for (int i = 0; i < size; ++i)
@@ -62,7 +62,7 @@ bool ResizableArray<T>::isEmpty() {
 
 /* Return true if this elem is present in this Resizable Array */
 template<class T>
-bool ResizableArray<T>::contains(T& elem) {
+bool ResizableArray<T>::contains(const T& elem) {
 	for (int i = 0; i < filled; ++i)
 		if (arrptr[i] == elem)
 			return true;
