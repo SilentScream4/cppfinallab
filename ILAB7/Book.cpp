@@ -2,6 +2,8 @@
 #include "Util.h"
 #include <stdexcept>
 
+#pragma region Constructors
+
 /* Instantiates a Book with empty fields/default values */
 Book::Book() {
 	title = '\0';
@@ -34,6 +36,66 @@ Book::Book(const Book& book) {
 	sphere = book.sphere;
 	currentlyAvailable = book.currentlyAvailable;
 }
+
+#pragma endregion
+
+#pragma region Getters
+
+/* Returns this Book's author as a String copy */
+String Book::getAuthor() {
+	return author;
+}
+
+/* Returns this Book's title as a String copy */
+String Book::getTitle() {
+	return title;
+}
+
+/* Returns this Book's publication year as an integer */
+int Book::getPublicationYear() {
+	return publicationYear;
+}
+
+/* Returns this Book's sphere as a String copy */
+String Book::getSphere() {
+	return sphere;
+}
+
+/* Returns this Book's copy amount as an integer */
+int Book::getCurrentAmount() {
+	return currentlyAvailable;
+}
+
+#pragma endregion
+
+#pragma region Setters
+
+/* Sets this Book's author */
+void Book::setAuthor(String& author) {
+	this->author = author;
+}
+
+/* Sets this Book's title */
+void Book::setTitle(String& title) {
+	this->title = title;
+}
+
+/* Sets this Book's publication year */
+void Book::setPublicationYear(int year) {
+	publicationYear = year;
+}
+
+/* Sets this Book's spehre*/
+void Book::setSphere(String& sphere) {
+	this->sphere = sphere;
+}
+
+/* Sets this Book's current copy amount */
+void Book::setCurrentAmount(int amount) {
+	currentlyAvailable = amount;
+}
+
+#pragma endregion
 
 /* Returns true if Books share the same author, title and publication year
    (not sphere though) */

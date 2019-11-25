@@ -22,6 +22,28 @@ public:
 	Book(const Book&);
 	~Book() {}
 
+	/* Returns this Book's author as a String copy */
+	String getAuthor();
+	/* Returns this Book's title as a String copy */
+	String getTitle();
+	/* Returns this Book's publication year as an integer */
+	int getPublicationYear();
+	/* Returns this Book's sphere as a String copy */
+	String getSphere();
+	/* Returns this Book's copy amount as an integer */
+	int getCurrentAmount();
+
+	/* Sets this Book's author */
+	void setAuthor(String&);
+	/* Sets this Book's title */
+	void setTitle(String&);
+	/* Sets this Book's publication year */
+	void setPublicationYear(int);
+	/* Sets this Book's spehre*/
+	void setSphere(String&);
+	/* Sets this Book's current copy amount */
+	void setCurrentAmount(int);
+
 	friend bool operator==(const Book&, const Book&);
 	friend bool operator!=(const Book&, const Book&);
 
