@@ -61,14 +61,14 @@ int main(int argc, char** argv) {
 			std::cout << "Enter delimiting character (it shouldn't be in the actual text, every book will start with it, but it will be ignored when reading): ";
 			std::cin.clear();
 			std::cin >> delim;
-		} while (std::cin.fail() || isalpha(delim) || isalnum(delim));
+		} while (std::cin.fail() || isalnum(delim));
 	}
 
 	ResizableArray<Book> books = ResizableArray<Book>();
 	while (!fin.eof() && fin.good()) {
 
 		if (delim != '\n') fin.ignore(INT_MAX, delim);
-		else while (!std::isalpha(fin.peek()) && !std::isalnum(fin.peek()))
+		else while (!std::isalnum(fin.peek()))
 			fin.ignore();
 
 		Book book = Book();
@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 			std::cerr << exc.what() << std::endl;
 			char yn;
 			do {
-				std::cout << "Continue reading file? (many more exceptions are likely to pop up) (y\n): ";
+				std::cout << "Continue reading file? (more exceptions may pop up if delimiter is not set) (y\n): ";
 				std::cin.clear();
 				std::cin >> yn;
 			} while (std::cin.fail() || yn != 'y' && yn != 'n');
