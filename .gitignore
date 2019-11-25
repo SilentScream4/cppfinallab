@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 ILAB7/booksTable.txt
+ILAB7/bestAvailability.txt
+ILAB7/spheresList.txt
