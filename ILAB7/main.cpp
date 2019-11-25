@@ -93,34 +93,38 @@ int main(int argc, char** argv) {
 	std::ofstream fout("bestAvailability.txt");
 	if (!fout.is_open())
 		std::cerr << "Can't create output file bestAvailability.txt" << std::endl;
+	else {
+		try {
+			fout << "Book with most available copies is:\n";
+			fout << findBestAvailability(books);
+			fout << '\n';
+		}
+		catch (std::invalid_argument exc) {
+			fout << exc.what() << std::endl;
+		}
 
-	try {
-		fout << "Book with most available copies is:\n";
-		fout << findBestAvailability(books);
-		fout << '\n';
-	}
-	catch (std::invalid_argument exc) {
-		fout << exc.what() << std::endl;
+		fout.close();
 	}
 
-	fout.close();
 	fout.open("booksTable.txt");
 	if (!fout.is_open())
 		std::cerr << "Can't create output file booksTable.txt" << std::endl;
+	else {
+		sort(books);
+		outputBooksTable(fout, books);
+		fout.close();
+	}
 
-	sort(books);
-	outputBooksTable(fout, books);
-
-	fout.close();
 	fout.open("spheresList.txt");
 	if (!fout.is_open())
 		std::cerr << "Can't create output file spheresList.txt" << std::endl;
+	else {
+		auto spheres = extractSpheres(books);
+		sort(spheres);
+		outputSpheresList(fout, spheres);
+		fout.close();
+	}
 
-	auto spheres = extractSpheres(books);
-	sort(spheres);
-	outputSpheresList(fout, spheres);
-
-	fout.close();
 	return 0;
 }
 
