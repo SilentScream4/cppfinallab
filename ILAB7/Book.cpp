@@ -182,7 +182,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	in >> b.publicationYear;
 	if (in.fail())
 		throw std::invalid_argument("Wrong input stream format (publication year)");
-	if (b.publicationYear < 1900 || b.publicationYear > 2020)
+	if (b.publicationYear < 0 || b.publicationYear > 2020)
 		b.publicationYear = 1970;
 	in.ignore(INT_MAX, '\n');
 
