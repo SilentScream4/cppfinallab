@@ -27,3 +27,26 @@ void Util::capitalizeFirstLetters(String& str) {
 	}
 	return;
 }
+
+/* Returns the length of a C-style string (excluding null-terminator) */
+int Util::strlen(const char* str) {
+	int c;
+	for (c = 0; str != nullptr && str[c]; ++c);
+	return c;
+}
+
+/* Copies C-style string @source into @dest. Is unsafe (doesn't make sure @dest has enough space) */
+void Util::strcpy(char* dest, const char* source) {
+	int i;
+	for (i = 0; source != nullptr && source[i] != '\0'; ++i)
+		dest[i] = source[i];
+	dest[i] = '\0';
+}
+
+/* Appends C-style string @source at the end of @dest. Is unsafe (doesn't make sure @dest has enough space) */
+void Util::strcat(char* dest, const char* source) {
+	int i, l = strlen(dest);
+	for (i = l; source != nullptr && source[i%l] != '\0'; ++i)
+		dest[i] = source[i%l];
+	dest[i] = '\0';
+}

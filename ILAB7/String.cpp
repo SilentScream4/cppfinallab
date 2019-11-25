@@ -1,7 +1,8 @@
 #include "String.h"
+#include "Util.h"
+
 #include <iostream>
 #include <stdexcept>
-#include <cstring>
 
 /* Unparameterized constructor instantiates empty C-string */
 String::String() {
@@ -12,20 +13,16 @@ String::String() {
 
 /* Parameterized constructor copies argumenent C-string */
 String::String(const char* newstr) {
-	length = newstr == nullptr ? 0 : strlen(newstr);
+	length = newstr == nullptr ? 0 : Util::strlen(newstr);
 	str = new char[length + 1];
-	for (int i = 0; i < length; ++i)
-		str[i] = newstr[i];
-	str[length] = '\0';
+	Util::strcpy(str, newstr);
 }
 
 /* Copy constructor copies another String */
 String::String(const String& string) {
 	length = string.length;
 	str = new char[length + 1];
-	for (int i = 0; i < length; ++i)
-		str[i] = string.str[i];
-	str[length] = '\0';
+	Util::strcpy(str, string.str);
 }
 
 /* Destructor return allocated memory */
@@ -46,13 +43,11 @@ const char* String::get() const {
 
 /* Copies C-style string recieved as a parameter */
 void String::set(const char* newstr) {
-	length = newstr == nullptr ? 0 : strlen(newstr);
+	length = newstr == nullptr ? 0 : Util::strlen(newstr);
 	if (str != nullptr)
 		delete[] str;
 	str = new char[length + 1];
-	for (int i = 0; i < length; ++i)
-		str[i] = newstr[i];
-	str[length] = '\0';
+	Util::strcpy(str, newstr);
 }
 
 /* Copies C-style string recieved as a parameter */
@@ -70,35 +65,25 @@ String& String::operator=(const String& string) {
 /* Concats two Strings */
 String operator+(const String& str1, const String& str2) {
 	char* newstr = new char[str1.length + str2.length + 1];
-	int i = 0;
-	while (i < str1.length)
-		newstr[i] = str1.str[i++];
-	while (i < str2.length)
-		newstr[i] = str2.str[i++%str1.length];
-	newstr[i] = '\0';
+	Util::strcpy(newstr, str1.str);
+	Util::strcat(newstr, str2.str);
 	return String(newstr);
 }
 
 /* Appends String with a single character */
 String operator+(const String& string, const char ch) {
 	char* newstr = new char[string.length + 2];
-	int i = 0;
-	while (i < string.length)
-		newstr[i] = string.str[i++];
-	newstr[i++] = ch;
-	newstr[i] = '\0';
+	Util::strcpy(newstr, string.str);
+	newstr[string.length] = ch;
+	newstr[string.length + 1] = '\0';
 	return String(newstr);
 }
 
 /* Appends this String with another String */
 String& String::operator+=(const String& string) {
 	char* newstr = new char[length + string.length + 1];
-	int i = 0;
-	while (i < length)
-		newstr[i] = str[i++];
-	while (i < string.length)
-		newstr[i] = string.str[i++%length];
-	newstr[i] = '\0';
+	Util::strcpy(newstr, str);
+	Util::strcat(newstr, string.str);
 	if (str != nullptr)
 		delete[] str;
 	length += string.length;
@@ -109,11 +94,9 @@ String& String::operator+=(const String& string) {
 /* Appends this String with a single character */
 String& String::operator+=(const char ch) {
 	char* newstr = new char[length + 2];
-	int i = 0;
-	while (i < length)
-		newstr[i] = str[i++];
-	newstr[i++] = ch;
-	newstr[i] = '\0';
+	Util::strcpy(newstr, str);
+	newstr[length] = ch;
+	newstr[length + 1] = '\0';
 	if (str != nullptr)
 		delete[] str;
 	length++;
@@ -148,6 +131,34 @@ char& String::operator[](const int index) {
 std::ostream& operator<<(std::ostream& out, const String& string) {
 	out << string.str;
 	return out;
+}
+
+/* Returns true if @str1 is lexicographically less than @str2 */
+bool operator<(const String& str1, const String& str2) {
+	if (str1.length == 0)
+		return true;
+	int lim = str1.length < str2.length ? str1.length : str2.length;
+	for (int i = 0; i < lim; ++i) {
+		if (tolower(str1.str[i]) < tolower(str2.str[i]))
+			return true;
+		else if (tolower(str1.str[i]) > tolower(str2.str[i]))
+			return false;
+	}
+	return false;
+}
+
+/* Returns true if @str1 is lexicographically more than @str2 */
+bool operator>(const String& str1, const String& str2) {
+	if (str2.length == 0)
+		return true;
+	int lim = str1.length < str2.length ? str1.length : str2.length;
+	for (int i = 0; i < lim; ++i) {
+		if (tolower(str1.str[i]) > tolower(str2.str[i]))
+			return true;
+		else if (tolower(str1.str[i]) < tolower(str2.str[i]))
+			return false;
+	}
+	return false;
 }
 
 /* Reads a String until a delimiting character is met */

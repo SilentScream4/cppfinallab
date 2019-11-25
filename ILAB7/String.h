@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+
+
 class String {
 
 	char* str;
@@ -36,6 +38,9 @@ public:
 	char& operator[](const int index);
 
 	friend std::ostream& operator<<(std::ostream&, const String&);
+
+	friend bool operator<(const String&, const String&);
+	friend bool operator>(const String&, const String&);
 
 };
 
