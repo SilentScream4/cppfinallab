@@ -187,6 +187,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	in.ignore(INT_MAX, '\n');
 
 	getline(in, b.sphere);
+	Util::capitalizeFirstLetters(b.sphere);
 
 	in >> b.currentlyAvailable;
 	if (in.fail())
