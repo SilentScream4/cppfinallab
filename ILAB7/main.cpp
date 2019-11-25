@@ -65,10 +65,10 @@ int main(int argc, char** argv) {
 	}
 
 	ResizableArray<Book> books = ResizableArray<Book>();
-	while (!fin.eof()) {
+	while (!fin.eof() && fin.good()) {
 
 		if (delim != '\n') fin.ignore(INT_MAX, delim);
-		else while (!std::isalpha(fin.peek()))
+		else while (!std::isalpha(fin.peek()) && !std::isalnum(fin.peek()))
 			fin.ignore();
 
 		Book book = Book();
@@ -85,8 +85,7 @@ int main(int argc, char** argv) {
 				std::cin.clear();
 				std::cin >> yn;
 			} while (std::cin.fail() || yn != 'y' && yn != 'n');
-			if (yn == 'y') fin.ignore(INT_MAX, delim);
-			else return -2;
+			if (yn == 'y') fin.clear();
 		}
 
 	}
@@ -157,7 +156,7 @@ void sort(ResizableArray<T>& arr) {
 	for (int i = 1; i < arr.getSize(); i++) {
 		T key = arr[i];
 		int j = i - 1;
-		for (; j >= 0; j--)
+		for (; j >= 0 && arr[j] > key; j--)
 			arr[j + 1] = arr[j];
 		arr[j + 1] = key;
 	}
@@ -169,7 +168,7 @@ void sort(T* arr, int n) {
 	for (int i = 1; i < n; i++) {
 		T key = arr[i];
 		int j = i - 1;
-		for (; j >= 0; j--)
+		for (; j >= 0 && arr[j] > key; j--)
 			arr[j + 1] = arr[j];
 		arr[j + 1] = key;
 	}
