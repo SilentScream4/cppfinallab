@@ -1,0 +1,5 @@
+                   Author                                             Title   Year              Sphere  Count
+              Jack London                                    The Star Rover   1915    Science Ficttion      5
+          Herbert Schildt        Java. A Beginner's Guide. Seventh Edition.   2017         Programming      8
+          Herbert Schildt         C++. The Complete Reference. 4th Edition.   2003         Programming     10
+      William Shakespeare                                  Romeo And Juliet   1597             Tragedy     15
