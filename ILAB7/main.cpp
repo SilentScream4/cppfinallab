@@ -92,10 +92,8 @@ int main(int argc, char** argv) {
 	}
 
 	std::ofstream fout("bestAvailability.txt");
-	if (!fout.is_open()) {
-		std::cerr << "Can't create output file bestAvailability.txt"<< std::endl;
-		return -3;
-	}
+	if (!fout.is_open())
+		std::cerr << "Can't create output file bestAvailability.txt" << std::endl;
 
 	try {
 		fout << "Book with most available copies is:\n";
@@ -108,20 +106,16 @@ int main(int argc, char** argv) {
 
 	fout.close();
 	fout.open("booksTable.txt");
-	if (!fout.is_open()) {
+	if (!fout.is_open())
 		std::cerr << "Can't create output file booksTable.txt" << std::endl;
-		return -3;
-	}
 
 	sort(books);
 	outputBooksTable(fout, books);
 
 	fout.close();
 	fout.open("spheresList.txt");
-	if (!fout.is_open()) {
+	if (!fout.is_open())
 		std::cerr << "Can't create output file spheresList.txt" << std::endl;
-		return -3;
-	}
 
 	auto spheres = extractSpheres(books);
 	sort(spheres);
