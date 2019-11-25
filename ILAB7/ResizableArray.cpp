@@ -12,6 +12,8 @@ void ResizableArray<T>::resize() {
 	arrptr = newarrptr;
 }
 
+#pragma region Constructors
+
 /* Instantiates a Resizable Array of size @resizeStep(8) */
 template<class T>
 ResizableArray<T>::ResizableArray() {
@@ -38,6 +40,8 @@ ResizableArray<T>::ResizableArray(const T* arr, const size_t size) {
 		arrptr[i] = arr[i];
 }
 
+#pragma endregion
+
 /* Destructor returns allocated memory */
 template<class T>
 ResizableArray<T>::~ResizableArray() {
@@ -54,6 +58,15 @@ int ResizableArray<T>::getSize() {
 template<class T>
 bool ResizableArray<T>::isEmpty() {
 	return !filled;
+}
+
+/* Return true if this elem is present in this Resizable Array */
+template<class T>
+bool ResizableArray<T>::contains(T& elem) {
+	for (int i = 0; i < filled; ++i)
+		if (arrptr[i] == elem)
+			return true;
+	return false;
 }
 
 /* Adds another element of type T at the end of the array,
