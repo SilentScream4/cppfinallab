@@ -12,6 +12,7 @@ public:
 	LinkedListNode();
 	LinkedListNode(LinkedListNode* next, LinkedListNode* previous = nullptr);
 	LinkedListNode(const T& item, LinkedListNode* next, LinkedListNode* previous = nullptr);
+	LinkedListNode(const LinkedListNode& linkedListNode);
 
 	void setItem(const T& item);
 	T& getItem() ;
