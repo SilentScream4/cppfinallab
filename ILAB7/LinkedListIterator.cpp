@@ -1,17 +1,11 @@
 #include "LinkedListIterator.h"
 
-/*
-LinkedList* linkedList;
-LinkedListNode* current;
-int size;
-int currentIndex;
-*/
-
 template<class T>
 LinkedListIterator<T>::LinkedListIterator(LinkedList<T>* linkedList, int index) {
 	this->linkedList = linkedList;
 	currentIndex = index;
-	current = linkedList[index];
+	current = linkedList.first;
+	current = current + index;
 	size = linkedList->size;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "LinkedListNode.h"
+#include "LinkedListIterator.h"
 
 template<class T>
 class LinkedList {
@@ -17,5 +18,8 @@ public:
 	void removeLast();
 
 	T& operator[](int index);
+
+	LinkedListIterator begin();
+	LinkedListIterator end();
 
 };

@@ -1,5 +1,7 @@
 #include "LinkedListNode.h"
 
+#pragma region Constructors
+
 template<class T>
 LinkedListNode<T>::LinkedListNode() {
 	item = nullptr;
@@ -21,7 +23,9 @@ LinkedListNode<T>::LinkedListNode(const T& item, LinkedListNode* next, LinkedLis
 	this->previous = previous;
 }
 
-#pragma region Setter
+#pragma endregion
+
+#pragma region Setters and getters
 
 template<class T>
 void LinkedListNode<T>::setItem(const T& item) {

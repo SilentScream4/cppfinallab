@@ -44,3 +44,13 @@ T& LinkedList<T>::operator[](int index) {
 		atIndex = atIndex->next;
 	return atIndex->getItem();
 }
+
+template<class T>
+LinkedListIterator<T> LinkedList<T>::begin() {
+	return LinkedListIterator(this);
+}
+
+template<class T>
+LinkedListIterator<T> LinkedList<T>::end() {
+	return LinkedLastIterator(this, size - 1);
+}

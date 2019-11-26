@@ -11,7 +11,6 @@ class LinkedListIterator {
 
 public:
 
-	LinkedListIterator();
 	LinkedListIterator(LinkedList<T>* linkedList, int index = 0);
 	LinkedListIterator(const LinkedListIterator& iterator);
 

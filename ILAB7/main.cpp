@@ -8,6 +8,7 @@
 #include "ResizableArray.h"
 #include "String.h"
 #include "ResizableArray.cpp"
+#include "LinkedList.h"
 
 /* Returns reference to the book with most available copies in a resizable array */
 Book& findBestAvailability(ResizableArray<Book>&);
