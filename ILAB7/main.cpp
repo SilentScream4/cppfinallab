@@ -4,11 +4,12 @@
 #include <cctype>
 #include <stdexcept>
 
+#include "LinkedList.h"
 #include "Book.h"
 #include "ResizableArray.h"
 #include "String.h"
 #include "ResizableArray.cpp"
-#include "LinkedList.h"
+
 
 /* Returns reference to the book with most available copies in a resizable array */
 Book& findBestAvailability(ResizableArray<Book>&);
@@ -20,6 +21,10 @@ Book& findBestAvailability(Book*, int);
 template<class T>
 void sort(ResizableArray<T>&);
 
+/* Sorts a linked list sent by a pointer in non-descending order                 */
+template<class T>
+void sort(LinkedList<T>& linkedList);
+
 /* Sorts an array sent by a pointer in non-descending order					     */
 template<class T>
 void sort(T*, int);
@@ -28,10 +33,10 @@ void sort(T*, int);
 void outputBooksTable(std::ostream& out, ResizableArray<Book>&);
 
 /* Returns a reference to Resizable Array of unique spheres in @books 			 */
-ResizableArray<String>& extractSpheres(ResizableArray<Book>&);
+LinkedList<String>& extractSpheres(ResizableArray<Book>&);
 
 /* Outputs &spheres to the stream &out											 */
-void outputSpheresList(std::ostream&, ResizableArray<String>&);
+void outputSpheresList(std::ostream&, LinkedList<String>&);
 
 int main(int argc, char** argv) {
 
@@ -120,7 +125,7 @@ int main(int argc, char** argv) {
 	if (!fout.is_open())
 		std::cerr << "Can't create output file spheresList.txt" << std::endl;
 	else {
-		auto spheres = extractSpheres(books);
+		LinkedList<String> spheres = extractSpheres(books);
 		sort(spheres);
 		outputSpheresList(fout, spheres);
 		fout.close();
@@ -128,7 +133,6 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
-
 
 /* Returns reference to the book with most available copies in a resizable array
    Throws Invalid Argument exception if recieved array is empty */
@@ -167,6 +171,18 @@ void sort(ResizableArray<T>& arr) {
 	}
 }
 
+/* Sorts a linked list sent by a pointer in non-descending order*/
+template<typename T>
+void sort(LinkedList<T>& linkedList) {
+	for (typename LinkedList<T>::LinkedListIterator itr = linkedList.begin(); itr < linkedList.getSize(); ++itr) {
+		T key = itr.getItem();
+		typename LinkedList<T>::LinkedListIterator j = itr - 1;
+		for (; j >= 0 && j.getItem() > key; --j)
+			(j + 1).setItem(j.getItem());
+		(j<0?linkedList.begin():j+1).setItem(key);
+	}
+}
+
 /* Sorts an array sent by a pointer in non-descending order*/
 template<class T>
 void sort(T* arr, int n) {
@@ -193,9 +209,9 @@ void outputBooksTable(std::ostream& out, ResizableArray<Book>& books) {
 }
 
 /* Returns a reference to Resizable Array of unique spheres in &books */
-ResizableArray<String>& extractSpheres(ResizableArray<Book>& books) {
+LinkedList<String>& extractSpheres(ResizableArray<Book>& books) {
 	int c = books.getSize();
-	ResizableArray<String>* spheres = new ResizableArray<String>(c);
+	LinkedList<String>* spheres = new LinkedList<String>();
 	for (int i = 0; i < c; ++i)
 		if (!spheres->contains(books[i].getSphere()))
 			spheres->add(books[i].getSphere());
@@ -203,8 +219,11 @@ ResizableArray<String>& extractSpheres(ResizableArray<Book>& books) {
 }
 
 /* Outputs &spheres to the stream &out */
-void outputSpheresList(std::ostream& out, ResizableArray<String>& spheres) {
+void outputSpheresList(std::ostream& out, LinkedList<String>& spheres) {
+	LinkedList<String>::LinkedListIterator end = spheres.end();
+	LinkedList<String>::LinkedListIterator begin = spheres.begin();
+
 	out << std::setw(20) << "Covered spheres:" << '\n';
-	for (int i = 0; i < spheres.getSize(); ++i)
-		out << std::setw(20) << spheres[i] << '\n';
+	for (LinkedList<String>::LinkedListIterator itr = begin; itr < spheres.getSize(); ++itr)
+		out << std::setw(20) << itr.getItem() << '\n';
 }

@@ -116,9 +116,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Book.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
-    <ClCompile Include="LinkedListIterator.cpp" />
-    <ClCompile Include="LinkedListNode.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ResizableArray.cpp" />
     <ClCompile Include="String.cpp" />
@@ -127,8 +124,6 @@
   <ItemGroup>
     <ClInclude Include="Book.h" />
     <ClInclude Include="LinkedList.h" />
-    <ClInclude Include="LinkedListIterator.h" />
-    <ClInclude Include="LinkedListNode.h" />
     <ClInclude Include="ResizableArray.h" />
     <ClInclude Include="String.h" />
     <ClInclude Include="Util.h" />
