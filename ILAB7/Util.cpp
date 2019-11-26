@@ -1,5 +1,4 @@
 #include "Util.h"
-#include <string>
 #include <cstdlib>
 
 /* Trims excessive white spaces (double spaces, leading and trailing spaces)*/
