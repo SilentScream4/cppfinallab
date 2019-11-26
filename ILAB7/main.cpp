@@ -1,13 +1,12 @@
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <cctype>
-#include <stdexcept>
 
 #include "LinkedList.h"
 #include "Book.h"
 #include "ResizableArray.h"
 #include "String.h"
+#include "Exception.h"
 
 
 /* Returns reference to the book with most available copies in a resizable array */
@@ -82,8 +81,8 @@ int main(int argc, char** argv) {
 			books.add(book);
 		}
 
-		catch (std::exception exc) {
-			std::cerr << exc.what() << std::endl;
+		catch (Exception& e) {
+			std::cerr << e.getMsg() << ': ' << e.getInfo() << std::endl;
 			char yn;
 			do {
 				std::cout << "Continue reading file? (more exceptions may pop up if delimiter is not set) (y\n): ";
@@ -104,8 +103,8 @@ int main(int argc, char** argv) {
 			fout << findBestAvailability(books);
 			fout << '\n';
 		}
-		catch (std::invalid_argument exc) {
-			fout << exc.what() << std::endl;
+		catch (Exception& e) {
+			fout << e.what() << std::endl;
 		}
 
 		fout.close();
@@ -137,7 +136,7 @@ int main(int argc, char** argv) {
    Throws Invalid Argument exception if recieved array is empty */
 Book& findBestAvailability(ResizableArray<Book>& books) {
 	if (books.isEmpty())
-		throw std::invalid_argument("Books list must not be empty");
+		throw Exception("Invalid argument exception!", 139, "main.cpp", "Books array must not be empty");
 	Book* bestAvailable = &books[0];
 	for (int i = 1; i < books.getSize(); ++i) {
 		if (books[i] > *bestAvailable)
@@ -150,7 +149,7 @@ Book& findBestAvailability(ResizableArray<Book>& books) {
    Throws Invalid Argument exception if recieved array is empty */
 Book& findBestAvailability(Book* books, int n) {
 	if (books == nullptr)
-		throw std::invalid_argument("Books list must not be empty");
+		throw Exception("Invalid argument exception!", 139, "main.cpp", "Books array must not be empty");
 	Book* bestAvailable = nullptr;
 	for (int i = 0; i < n; i++)
 		if (bestAvailable == nullptr || books[i] > *bestAvailable)
@@ -178,7 +177,7 @@ void sort(LinkedList<T>& linkedList) {
 		typename LinkedList<T>::LinkedListIterator j = itr - 1;
 		for (; j >= 0 && j.getItem() > key; --j)
 			(j + 1).setItem(j.getItem());
-		(j<0?linkedList.begin():j+1).setItem(key);
+		(j < 0 ? linkedList.begin() : j + 1).setItem(key);
 	}
 }
 

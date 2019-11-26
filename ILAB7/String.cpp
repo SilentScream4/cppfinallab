@@ -1,8 +1,8 @@
 #include "String.h"
 #include "Util.h"
+#include "Exception.h"
 
 #include <iostream>
-#include <stdexcept>
 
 /* Unparameterized constructor instantiates empty C-string */
 String::String() {
@@ -123,7 +123,7 @@ bool operator!=(const String& str1, const String& str2) {
 /* Returns character at index */
 char& String::operator[](const int index) {
 	if (index < 0 || index > length)
-		throw std::out_of_range("String index out of bounds");
+		throw Exception("Index out of range in string!", 126, "String.cpp");
 	return str[index];
 }
 
@@ -171,7 +171,7 @@ void getline(
 	char* buf = new char[len];
 	in.getline(buf, len, delim);
 	if (in.fail())
-		throw std::invalid_argument("Wrong input stream format (author name)");
+		throw Exception("Wrong input stream format!", 174, "String.cpp");
 	string.set(buf);
 	delete[] buf;
 }

@@ -1,4 +1,5 @@
 #pragma once
+#include "Exception.h"
 
 template<class T>
 class ResizableArray {
@@ -87,7 +88,7 @@ public:
 	/* Return element at @index by reference (mutable) */
 	T& elementAt(const int index) {
 		if (index < 0 || index >= filled)
-			throw std::out_of_range("Resizable array index out of range");
+			throw Exception("Index out of range in ResizableArray!", 90, "ResizableArray.h");
 		return arrptr[index];
 	}
 

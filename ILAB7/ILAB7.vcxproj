@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Book.h" />
+    <ClInclude Include="Exception.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="ResizableArray.h" />
     <ClInclude Include="String.h" />

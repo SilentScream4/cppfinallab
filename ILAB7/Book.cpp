@@ -1,6 +1,6 @@
 #include "Book.h"
 #include "Util.h"
-#include <stdexcept>
+#include "Exception.h"
 
 #pragma region Constructors
 
@@ -173,25 +173,43 @@ std::ostream& operator<<(std::ostream& out, const Book& b) {
    Throws invalid_argument exception if input format is invalid.*/
 std::istream& operator>>(std::istream& in, Book& b) {
 
-	getline(in, b.author);
+	try {
+		getline(in, b.author);
+	}
+	catch (Exception& e) {
+		e.setInfo("Wrong author name format");
+		throw e;
+	}
 	Util::capitalizeFirstLetters(b.author);
 
-	getline(in, b.title);
+	try {
+		getline(in, b.title);
+	}
+	catch (Exception& e) {
+		e.setInfo("Wrong title format");
+		throw e;
+	}
 	Util::capitalizeFirstLetters(b.title);
 
 	in >> b.publicationYear;
 	if (in.fail())
-		throw std::invalid_argument("Wrong input stream format (publication year)");
+		throw Exception("Wrong input stream format!", 209, "Book.cpp", "Wrong publication year format");
 	if (b.publicationYear < 0 || b.publicationYear > 2020)
 		b.publicationYear = 1970;
 	in.ignore(INT_MAX, '\n');
 
-	getline(in, b.sphere);
+	try {
+		getline(in, b.sphere);
+	}
+	catch (Exception& e) {
+		e.setInfo("Wrong sphere format");
+		throw e;
+	}
 	Util::capitalizeFirstLetters(b.sphere);
 
 	in >> b.currentlyAvailable;
 	if (in.fail())
-		throw std::invalid_argument("Wrong input stream format (book count)");
+		throw Exception("Wrong input stream format!", 209, "Book.cpp", "Wrong book amount format");
 	in.ignore(INT_MAX, '\n');
 
 	return in;

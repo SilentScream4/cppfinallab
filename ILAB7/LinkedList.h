@@ -1,4 +1,5 @@
 #pragma once
+#include "Exception.h"
 
 /* Linked List class - consists of linked nodes containing items of type T.
    Only consecutive iteration using iteratior is allowed. Changing connections between links is possible
@@ -154,7 +155,7 @@ public:
 	/* Return item contained in node at @index */
 	T& operator[](int index) {
 		if (index < 0 || index >= size)
-			throw std::out_of_range("Index out of range in linked list!");
+			throw Exception("Index out of range in linked list!", 158, "LinkedList.h");
 		LinkedListNode* atIndex = first;
 		for (int i = 0; i < index; ++i)
 			atIndex = atIndex->next;
@@ -204,7 +205,7 @@ public:
 			this->linkedList = linkedList;
 			size = linkedList->size;
 			if (index >= size || index < 0)
-				throw std::out_of_range("Iterator index out of linked list range");
+				throw Exception("Index out of range in linked list!", 208, "LinkedList.h");
 			currentIndex = index;
 			current = linkedList->first;
 			for (int i = 0; i < index; ++i)
