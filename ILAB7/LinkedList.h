@@ -121,9 +121,9 @@ public:
 		LinkedListNode* current = first;
 		LinkedListNode* previous = first;
 		for (int i = 0; i < size; ++i) {
+			current = current->next;
 			delete previous;
 			previous = current;
-			current = current->next;
 		}
 		delete current;
 	}

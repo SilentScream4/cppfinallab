@@ -8,7 +8,6 @@
 #include "Book.h"
 #include "ResizableArray.h"
 #include "String.h"
-#include "ResizableArray.cpp"
 
 
 /* Returns reference to the book with most available copies in a resizable array */
