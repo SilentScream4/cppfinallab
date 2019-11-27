@@ -1,12 +1,14 @@
 #pragma once
 #include <stdexcept>
 
+/* Exception class. Designed to help point at a specific file and line of code. 
+   Can be caught and rethrown with additional info */
 class Exception : public std::exception {
 
-	const char* msg;
-	int line;
-	const char* file;
-	const char* info;
+	const char* msg; // Core information about exception
+	int line; // Line of code exception was triggered
+	const char* file; // File exception was triggered in
+	const char* info; // Additional info (ex. misread string name)
 
 public:
 
@@ -16,12 +18,6 @@ public:
 		this->file = file;
 		this->info = info;
 	}
-
-	/*~Exception() {
-		delete[] msg;
-		delete[] file;
-		delete[] info;
-	}*/
 
 	const char* getMsg() {
 		return msg;

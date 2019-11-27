@@ -200,7 +200,7 @@ public:
 	public:
 
 		/* Creates an iterator over @linkedList at @index. By default points at the first element.
-		   Throws out_of_range exception if the specified index is out of used node range in specified list */
+		   Throws exception if the specified index is out of used node range in specified list */
 		LinkedListIterator(LinkedList* linkedList, int index = 0) {
 			this->linkedList = linkedList;
 			size = linkedList->size;

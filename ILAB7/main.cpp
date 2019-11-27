@@ -72,8 +72,10 @@ int main(int argc, char** argv) {
 	while (!fin.eof() && fin.good()) {
 
 		if (delim != '\n') fin.ignore(INT_MAX, delim);
-		else while (!std::isalnum(fin.peek()))
+		else while (!fin.eof() && !std::isalnum(fin.peek()))
 			fin.ignore();
+
+		if (fin.eof()) break;
 
 		Book book = Book();
 		try {
@@ -82,7 +84,7 @@ int main(int argc, char** argv) {
 		}
 
 		catch (Exception& e) {
-			std::cerr << e.getMsg() << ': ' << e.getInfo() << std::endl;
+			std::cerr << e.getMsg() << ": " << e.getInfo() << std::endl;
 			char yn;
 			do {
 				std::cout << "Continue reading file? (more exceptions may pop up if delimiter is not set) (y\n): ";
@@ -104,7 +106,7 @@ int main(int argc, char** argv) {
 			fout << '\n';
 		}
 		catch (Exception& e) {
-			fout << e.what() << std::endl;
+			fout << e.getMsg() << ": " << e.getInfo() << std::endl;
 		}
 
 		fout.close();
@@ -149,7 +151,7 @@ Book& findBestAvailability(ResizableArray<Book>& books) {
    Throws Invalid Argument exception if recieved array is empty */
 Book& findBestAvailability(Book* books, int n) {
 	if (books == nullptr)
-		throw Exception("Invalid argument exception!", 139, "main.cpp", "Books array must not be empty");
+		throw Exception("Invalid argument exception!", 152, "main.cpp", "Books array must not be empty");
 	Book* bestAvailable = nullptr;
 	for (int i = 0; i < n; i++)
 		if (bestAvailable == nullptr || books[i] > *bestAvailable)
