@@ -206,7 +206,7 @@ public:
 			size = linkedList->size;
 			if (index >= size || index < 0)
 				throw Exception("Index out of range in linked list!", 208, "LinkedList.h");
-			currentIndex = index;
+				currentIndex = index;
 			current = linkedList->first;
 			for (int i = 0; i < index; ++i)
 				current = &current->getNext();

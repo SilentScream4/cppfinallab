@@ -17,10 +17,12 @@ private:
 
 public:
 
+	/* Instantiates a Book with empty fields/default values */
 	Book();
+	/* Instantiates a Book with recieved arguments */
 	Book(String, String, date_y, String, unsigned int);
+	/* Instantiates a copy of the Book @book */
 	Book(const Book&);
-	~Book() {}
 
 	/* Returns this Book's author as a String copy */
 	String getAuthor();
@@ -44,21 +46,39 @@ public:
 	/* Sets this Book's current copy amount */
 	void setCurrentAmount(int);
 
+	/* Returns true if Books share the same author, title and publication year
+   (not sphere though) */
 	friend bool operator==(const Book&, const Book&);
+	/* Returns true if Books have different authors or titles or publication years
+   (not spheres though) */
 	friend bool operator!=(const Book&, const Book&);
 
+	/* Decrements the available amount of the first Book, if the Books are the same.
+   Return the first Book otherwise */
 	friend Book operator-(const Book&, const Book&);
+	/* Increments the available amount of the first Book, if the Books are the same.
+   Return the first Book otherwise */
 	Book operator+(const Book&);
 
+	/* Returns true if the first Book has less available copies
+   (does not check for Book equality) */
 	friend bool operator<(const Book&, const Book&);
+	/* Return true if the first Book has more available copies
+   (does not check for Book equality */
 	bool operator>(const Book&);
 
+	/* Sets the amount of avaialable copies to the value on the right of equals */
 	Book& operator=(const unsigned int);
 
+	/* Incerements the amount of available copies of this Book by 1 (postfix version) */
 	friend Book operator++(Book& b);
+	/* Incerements the amount of available copies of this Book by 1 (prefix version) */
 	void operator++();
 
+	/* Outputs information about this Book into the stream &out as table row */
 	friend std::ostream& operator<<(std::ostream& out, const Book& b);
+	/* Reads Book object properties from input stream &in consecutively, each on a separate line
+   Throws invalid_argument exception if input format is invalid.*/
 	friend std::istream& operator>>(std::istream& in, Book& b);
 
 };

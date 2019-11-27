@@ -48,4 +48,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="input2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="input3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="input1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

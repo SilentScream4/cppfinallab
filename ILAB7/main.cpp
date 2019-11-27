@@ -174,13 +174,14 @@ void sort(ResizableArray<T>& arr) {
 /* Sorts a linked list sent by a pointer in non-descending order*/
 template<typename T>
 void sort(LinkedList<T>& linkedList) {
-	for (typename LinkedList<T>::LinkedListIterator itr = linkedList.begin(); itr < linkedList.getSize(); ++itr) {
-		T key = itr.getItem();
-		typename LinkedList<T>::LinkedListIterator j = itr - 1;
-		for (; j >= 0 && j.getItem() > key; --j)
-			(j + 1).setItem(j.getItem());
-		(j < 0 ? linkedList.begin() : j + 1).setItem(key);
-	}
+	if (linkedList.getSize() != 0)
+		for (typename LinkedList<T>::LinkedListIterator itr = linkedList.begin(); itr < linkedList.getSize(); ++itr) {
+			T key = itr.getItem();
+			typename LinkedList<T>::LinkedListIterator j = itr - 1;
+			for (; j >= 0 && j.getItem() > key; --j)
+				(j + 1).setItem(j.getItem());
+			(j < 0 ? linkedList.begin() : j + 1).setItem(key);
+		}
 }
 
 /* Sorts an array sent by a pointer in non-descending order*/
@@ -220,10 +221,9 @@ LinkedList<String>& extractSpheres(ResizableArray<Book>& books) {
 
 /* Outputs &spheres to the stream &out */
 void outputSpheresList(std::ostream& out, LinkedList<String>& spheres) {
-	LinkedList<String>::LinkedListIterator end = spheres.end();
-	LinkedList<String>::LinkedListIterator begin = spheres.begin();
-
+	if (spheres.getSize() == 0)
+		return;
 	out << std::setw(20) << "Covered spheres:" << '\n';
-	for (LinkedList<String>::LinkedListIterator itr = begin; itr < spheres.getSize(); ++itr)
+	for (LinkedList<String>::LinkedListIterator itr = spheres.begin(); itr < spheres.getSize(); ++itr)
 		out << std::setw(20) << itr.getItem() << '\n';
 }
