@@ -180,7 +180,7 @@ void sort(LinkedList<T>& linkedList) {
 			typename LinkedList<T>::LinkedListIterator j = itr - 1;
 			for (; j >= 0 && j.getItem() > key; --j)
 				(j + 1).setItem(j.getItem());
-			(j < 0 ? linkedList.begin() : j + 1).setItem(key);
+			(++j).setItem(key);
 		}
 }
 

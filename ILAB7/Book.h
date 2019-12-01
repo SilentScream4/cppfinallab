@@ -71,9 +71,9 @@ public:
 	Book& operator=(const unsigned int);
 
 	/* Incerements the amount of available copies of this Book by 1 (postfix version) */
-	friend Book operator++(Book& b);
+	friend const Book operator++(Book& b,int);
 	/* Incerements the amount of available copies of this Book by 1 (prefix version) */
-	void operator++();
+	const Book& operator++(int);
 
 	/* Outputs information about this Book into the stream &out as table row */
 	friend std::ostream& operator<<(std::ostream& out, const Book& b);

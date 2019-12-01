@@ -206,7 +206,7 @@ public:
 			size = linkedList->size;
 			if (index >= size || index < 0)
 				throw Exception("Index out of range in linked list!", 208, "LinkedList.h");
-				currentIndex = index;
+			currentIndex = index;
 			current = linkedList->first;
 			for (int i = 0; i < index; ++i)
 				current = &current->getNext();
@@ -224,7 +224,7 @@ public:
 		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
 		LinkedListIterator operator++() {
 			LinkedListIterator temp = LinkedListIterator(*this);
-			if (current != nullptr)
+			if (currentIndex >= 0 && &current->getNext() != nullptr)
 				current = &current->getNext();
 			currentIndex++;
 			return temp;
@@ -233,7 +233,7 @@ public:
 		/* Prefix increment - iterates to the next node if any are left. Is out of range unsafe,
 		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
 		LinkedListIterator& operator++(int) {
-			if (current != nullptr)
+			if (currentIndex >= 0 && &current->getNext() != nullptr)
 				current = &current->getNext();
 			currentIndex++;
 			return *this;
@@ -243,7 +243,7 @@ public:
 		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
 		LinkedListIterator operator--() {
 			LinkedListIterator temp = LinkedListIterator(*this);
-			if (current != nullptr)
+			if (currentIndex < size && &current->getPrevious() != nullptr)
 				current = &current->getPrevious();
 			currentIndex--;
 			return temp;
@@ -252,7 +252,7 @@ public:
 		/* Prefix decrement - iterates to the previous node if any are left. Is out of range unsafe,
 		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
 		LinkedListIterator& operator--(int) {
-			if (current != nullptr)
+			if (currentIndex < size && &current->getPrevious() != nullptr)
 				current = &current->getPrevious();
 			currentIndex--;
 			return *this;
@@ -334,7 +334,7 @@ public:
 		bool operator!=(const LinkedListIterator& itr) {
 			return linkedList != itr.linkedList || currentIndex != itr.currentIndex;
 		}
-		
+
 #pragma endregion
 
 	};

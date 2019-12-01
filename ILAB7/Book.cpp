@@ -146,16 +146,16 @@ Book& Book::operator=(const unsigned int amount) {
 }
 
 /* Incerements the amount of available copies of this Book by 1 (postfix version) */
-Book operator++(Book& b) {
+const Book operator++(Book& b, int) {
 	Book pb = b;
 	b.currentlyAvailable++;
 	return pb;
 }
 
 /* Incerements the amount of available copies of this Book by 1 (prefix version) */
-void Book::operator++() {
+const Book& Book::operator++(int) {
 	currentlyAvailable++;
-	return;
+	return *this;
 }
 
 /* Outputs information about this Book into the stream &out as table row */
