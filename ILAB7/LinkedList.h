@@ -221,7 +221,7 @@ public:
 		}
 
 		/* Postfix increment - iterates to the next node if any are left. Is out of range unsafe,
-		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
+		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator operator++() {
 			LinkedListIterator temp = LinkedListIterator(*this);
 			if (currentIndex >= 0 && &current->getNext() != nullptr)
@@ -231,7 +231,7 @@ public:
 		}
 
 		/* Prefix increment - iterates to the next node if any are left. Is out of range unsafe,
-		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
+		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator& operator++(int) {
 			if (currentIndex >= 0 && &current->getNext() != nullptr)
 				current = &current->getNext();
@@ -240,7 +240,7 @@ public:
 		}
 
 		/* Postfix decrement - iterates to the previous node if any are left. Is out of range unsafe,
-		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
+		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator operator--() {
 			LinkedListIterator temp = LinkedListIterator(*this);
 			if (currentIndex < size && &current->getPrevious() != nullptr)
@@ -250,7 +250,7 @@ public:
 		}
 
 		/* Prefix decrement - iterates to the previous node if any are left. Is out of range unsafe,
-		   going out of range will lead to null pointer exception if any changes to the pointed node are to be made */
+		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator& operator--(int) {
 			if (currentIndex < size && &current->getPrevious() != nullptr)
 				current = &current->getPrevious();
@@ -258,13 +258,17 @@ public:
 			return *this;
 		}
 
-		/* Sets the item of the pointed node to @item */
+		/* Sets the item of the pointed node to @item. Throws an exception if iterator is out of list range */
 		void setItem(const T& item) {
+			if (currentIndex < 0 && currentIndex >= size)
+				throw Exception("Index out of list range!", 264, "LinkedList.h");
 			current->setItem(item);
 		}
 
-		/* Returns a reference to the item contained in pointed node */
+		/* Returns a reference to the item contained in pointed node. Throws an exception if iterator is out of list range */
 		T& getItem() {
+			if (currentIndex < 0 && currentIndex >= size)
+				throw Exception("Index out of list range!", 271, "LinkedList.h");
 			return current->getItem();
 		}
 
