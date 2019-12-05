@@ -3,11 +3,9 @@
 
 #include "String.h"
 
-typedef unsigned int date_y;
+typedef unsigned short date_y;
 
 class Book {
-
-private:
 
 	String author;
 	String title;
@@ -67,13 +65,21 @@ public:
    (does not check for Book equality */
 	bool operator>(const Book&);
 
+	/* Copies values from parameter to this Book */
+	Book& operator=(const Book&);
+
 	/* Sets the amount of avaialable copies to the value on the right of equals */
 	Book& operator=(const unsigned int);
 
 	/* Incerements the amount of available copies of this Book by 1 (postfix version) */
 	friend const Book operator++(Book& b,int);
 	/* Incerements the amount of available copies of this Book by 1 (prefix version) */
-	const Book& operator++(int);
+	const Book& operator++();
+
+	/* Decrements the amount of available copies of this Book by 1 (postfix version) */
+	friend const Book operator--(Book& b, int);
+	/* Decrements the amount of available copies of this Book by 1 (prefix version) */
+	const Book& operator--();
 
 	/* Outputs information about this Book into the stream &out as table row */
 	friend std::ostream& operator<<(std::ostream& out, const Book& b);

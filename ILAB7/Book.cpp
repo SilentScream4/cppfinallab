@@ -139,6 +139,16 @@ bool Book::operator>(const Book& b) {
 	return currentlyAvailable > b.currentlyAvailable;
 }
 
+/* Copies values from parameter to this Book */
+Book& Book::operator=(const Book& b) {
+	author = b.author;
+	title = b.title;
+	publicationYear = b.publicationYear;
+	sphere = b.sphere;
+	currentlyAvailable = b.currentlyAvailable;
+	return *this;
+}
+
 /* Sets the amount of avaialable copies to the value on the right of equals */
 Book& Book::operator=(const unsigned int amount) {
 	currentlyAvailable = amount;
@@ -153,8 +163,21 @@ const Book operator++(Book& b, int) {
 }
 
 /* Incerements the amount of available copies of this Book by 1 (prefix version) */
-const Book& Book::operator++(int) {
+const Book& Book::operator++() {
 	currentlyAvailable++;
+	return *this;
+}
+
+/* Decrements the amount of available copies of this Book by 1 (postfix version) */
+const Book operator--(Book& b, int) {
+	Book pb = b;
+	b.currentlyAvailable--;
+	return pb;
+}
+
+/* Incerements the amount of available copies of this Book by 1 (prefix version) */
+const Book& Book::operator--() {
+	currentlyAvailable--;
 	return *this;
 }
 
@@ -191,11 +214,13 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	}
 	Util::capitalizeFirstLetters(b.title);
 
-	in >> b.publicationYear;
+	int year;
+	in >> year;
 	if (in.fail())
-		throw Exception("Wrong input stream format!", 209, "Book.cpp", "Wrong publication year format");
-	if (b.publicationYear < 0 || b.publicationYear > 2020)
-		b.publicationYear = 1970;
+		throw Exception("Wrong input stream format!", 220, "Book.cpp", "Wrong publication year format");
+	if (year < 0 || year > 2020)
+		year = 1970;
+	b.publicationYear = year;
 	in.ignore(INT_MAX, '\n');
 
 	try {
@@ -209,7 +234,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 
 	in >> b.currentlyAvailable;
 	if (in.fail())
-		throw Exception("Wrong input stream format!", 209, "Book.cpp", "Wrong book amount format");
+		throw Exception("Wrong input stream format!", 237, "Book.cpp", "Wrong book amount format");
 	in.ignore(INT_MAX, '\n');
 
 	return in;

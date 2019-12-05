@@ -7,6 +7,7 @@
 #include "ResizableArray.h"
 #include "String.h"
 #include "Exception.h"
+#include "Pair.h"
 
 
 /* Returns reference to the book with most available copies in a resizable array */
@@ -21,7 +22,7 @@ void sort(ResizableArray<T>&);
 
 /* Sorts a linked list sent by a pointer in non-descending order                 */
 template<class T>
-void sort(LinkedList<T>& linkedList);
+void sort(LinkedList<T>&);
 
 /* Sorts an array sent by a pointer in non-descending order					     */
 template<class T>
@@ -30,11 +31,8 @@ void sort(T*, int);
 /* Outputs a table to the stream &out from the books in vector &books			 */
 void outputBooksTable(std::ostream& out, ResizableArray<Book>&);
 
-/* Returns a reference to Resizable Array of unique spheres in @books 			 */
-LinkedList<String>& extractSpheres(ResizableArray<Book>&);
-
-/* Outputs &spheres to the stream &out											 */
-void outputSpheresList(std::ostream&, LinkedList<String>&);
+/* Outputs the list of unique spheres to the stream &out from ResizableArray of Book @books */
+void outputSpheresList(std::ostream& out, ResizableArray<Book>& books);
 
 int main(int argc, char** argv) {
 
@@ -125,13 +123,16 @@ int main(int argc, char** argv) {
 	if (!fout.is_open())
 		std::cerr << "Can't create output file spheresList.txt" << std::endl;
 	else {
-		LinkedList<String> spheres = extractSpheres(books);
-		sort(spheres);
-		outputSpheresList(fout, spheres);
+		outputSpheresList(fout, books);
 		fout.close();
 	}
 
 	return 0;
+}
+
+/* Overloaded comparison operator to properly sort spheres list */
+bool operator>(const Pair<String, int>& p1, const Pair<String, int>& p2) {
+	return p1.getFirst() > p2.getFirst();
 }
 
 /* Returns reference to the book with most available copies in a resizable array
@@ -175,7 +176,7 @@ void sort(ResizableArray<T>& arr) {
 template<typename T>
 void sort(LinkedList<T>& linkedList) {
 	if (linkedList.getSize() != 0)
-		for (typename LinkedList<T>::LinkedListIterator itr = linkedList.begin(); itr < linkedList.getSize(); ++itr) {
+		for (typename LinkedList<T>::LinkedListIterator itr = linkedList.begin() + 1; itr < linkedList.getSize(); ++itr) {
 			T key = itr.getItem();
 			typename LinkedList<T>::LinkedListIterator j = itr - 1;
 			for (; j >= 0 && j.getItem() > key; --j)
@@ -209,21 +210,30 @@ void outputBooksTable(std::ostream& out, ResizableArray<Book>& books) {
 		out << books[i];
 }
 
-/* Returns a reference to Resizable Array of unique spheres in &books */
-LinkedList<String>& extractSpheres(ResizableArray<Book>& books) {
-	int c = books.getSize();
-	LinkedList<String>* spheres = new LinkedList<String>();
-	for (int i = 0; i < c; ++i)
-		if (!spheres->contains(books[i].getSphere()))
-			spheres->add(books[i].getSphere());
-	return *spheres;
-}
-
-/* Outputs &spheres to the stream &out */
-void outputSpheresList(std::ostream& out, LinkedList<String>& spheres) {
-	if (spheres.getSize() == 0)
+/* Outputs the list of unique spheres to the stream &out from ResizableArray of Book @books */
+void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
+	if (books.getSize() == 0)
 		return;
-	out << std::setw(20) << "Covered spheres:" << '\n';
-	for (LinkedList<String>::LinkedListIterator itr = spheres.begin(); itr < spheres.getSize(); ++itr)
-		out << std::setw(20) << itr.getItem() << '\n';
+
+	int c = books.getSize();
+	LinkedList<String> spheres = LinkedList<String>();
+	LinkedList<int> values = LinkedList<int>();
+	for (int i = 0; i < c; ++i) {
+		int ind = spheres.find(books[i].getSphere());
+		if (ind == spheres.getSize()) {
+			spheres.add(books[i].getSphere());
+			values.add(1);
+		}
+		else values[ind]++;
+	}
+
+	LinkedList<Pair<String, int>> sortedSpheres;
+	for (int i = 0; i < spheres.getSize(); ++i)
+		sortedSpheres.add(makePair(spheres[i], values[i]));
+
+	sort(sortedSpheres);
+
+	out << std::setw(20) << "Covered spheres:" << std::setw(7) << "Count" << '\n';
+	for (LinkedList<Pair<String, int>>::LinkedListIterator itr = sortedSpheres.begin(); itr < sortedSpheres.getSize(); ++itr)
+		out << std::setw(20) << itr.getItem().getFirst() << std::setw(7) << itr.getItem().getSecond() << '\n';
 }
