@@ -1,4 +1,4 @@
-    Covered spheres:
-         Programming
-     Science Fiction
-             Tragedy
+    Covered spheres:  Count
+         Programming      2
+     Science Fiction      1
+             Tragedy      1
