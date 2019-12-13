@@ -18,4 +18,7 @@ namespace Util {
 	/* Appends C-style string @source at the end of @dest. Is unsafe (doesn't make sure @dest has enough space) */
 	void strcat(char*, const char*);
 
+	template<class T>
+	void memcpy(T*, const T*, const unsigned int);
+
 }

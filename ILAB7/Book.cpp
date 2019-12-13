@@ -2,13 +2,20 @@
 #include "Util.h"
 #include "Exception.h"
 
+void memcpy(String* dest, const String* source, const unsigned int size) {
+	for (int i = 0; i < size; ++i)
+		dest[i] = source[i];
+}
+
+
 #pragma region Constructors
 
 /* Instantiates a Book with empty fields/default values */
 Book::Book() {
 	title = '\0';
 	author = '\0';
-	sphere = '\0';
+	sphereCount = 0;
+	spheres = nullptr;
 	publicationYear = 1970;
 	currentlyAvailable = 0;
 }
@@ -18,13 +25,21 @@ Book::Book(
 	String author = '\0',
 	String title = '\0',
 	date_y publicationYear = 1970,
-	String sphere = '\0',
+	unsigned int sphereCount = 0,
+	String* spheres = nullptr,
 	unsigned int currentlyAvailable = 0
 ) {
 	this->author = author;
 	this->title = title;
 	this->publicationYear = publicationYear;
-	this->sphere = sphere;
+	if (sphereCount > MAX_SPHERE_COUNT || sphereCount == 0)
+		throw Exception("Sphere count exceeds limit or must be at least 1!", 30, "Book.cpp");
+	if (this->sphereCount < sphereCount) {
+		delete[] spheres;
+		spheres = new String[sphereCount];
+	}
+	memcpy(this->spheres, spheres, sphereCount);
+	this->sphereCount = sphereCount;
 	this->currentlyAvailable = currentlyAvailable;
 }
 
@@ -35,11 +50,21 @@ Book::Book(const Book& book) {
 	author = book.author;
 	title = book.title;
 	publicationYear = book.publicationYear;
-	sphere = book.sphere;
+	if (sphereCount < book.sphereCount) {
+		delete[] spheres;
+		spheres = new String[book.sphereCount];
+	}
+	memcpy(spheres, book.spheres, book.sphereCount);
+	sphereCount = book.sphereCount;
 	currentlyAvailable = book.currentlyAvailable;
 }
 
 #pragma endregion
+
+Book::~Book() {
+	if (spheres != nullptr)
+		delete[] spheres;
+}
 
 #pragma region Getters
 
@@ -58,9 +83,13 @@ int Book::getPublicationYear() const {
 	return publicationYear;
 }
 
+int Book::getSpheresCount() const {
+	return sphereCount;
+}
+
 /* Returns this Book's sphere as a String copy */
-String Book::getSphere() const {
-	return sphere;
+const String* Book::getSpheres() const {
+	return spheres;
 }
 
 /* Returns this Book's copy amount as an integer */
@@ -73,27 +102,30 @@ int Book::getCurrentAmount() const {
 #pragma region Setters
 
 /* Sets this Book's author */
-void Book::setAuthor(String& author) {
+void Book::setAuthor(const String& author) {
 	this->author = author;
 }
 
 /* Sets this Book's title */
-void Book::setTitle(String& title) {
+void Book::setTitle(const String& title) {
 	this->title = title;
 }
 
 /* Sets this Book's publication year */
-void Book::setPublicationYear(int year) {
+void Book::setPublicationYear(const int year) {
 	publicationYear = year;
 }
 
 /* Sets this Book's spehre*/
-void Book::setSphere(String& sphere) {
-	this->sphere = sphere;
+void Book::setSpheres(const String* spheres, const int sphereCount) {
+	if (sphereCount > MAX_SPHERE_COUNT || sphereCount <= 0)
+		throw Exception("Sphere count exceeds limit!", 30, "Book.cpp");
+	this->sphereCount = sphereCount;
+	memcpy(this->spheres, spheres, sphereCount);
 }
 
 /* Sets this Book's current copy amount */
-void Book::setCurrentAmount(int amount) {
+void Book::setCurrentAmount(const int amount) {
 	currentlyAvailable = amount;
 }
 
@@ -119,14 +151,14 @@ bool operator!=(const Book& b1, const Book& b2) {
    Return the first Book otherwise */
 Book operator-(const Book& b1, const Book& b2) {
 	if (b1 != b2) return b1;
-	return Book(b1.author, b1.title, b1.publicationYear, b1.sphere, b1.currentlyAvailable - b2.currentlyAvailable);
+	return Book(b1.author, b1.title, b1.publicationYear, b1.sphereCount, b1.spheres, b1.currentlyAvailable - b2.currentlyAvailable);
 }
 
 /* Increments the available amount of the first Book, if the Books are the same.
    Return the first Book otherwise */
 Book Book::operator+(const Book& book) const {
 	if (*this != book) return *this;
-	return Book(author, title, publicationYear, sphere, currentlyAvailable + book.currentlyAvailable);
+	return Book(author, title, publicationYear, sphereCount, spheres, currentlyAvailable + book.currentlyAvailable);
 }
 
 /* Returns true if the first Book has less available copies
@@ -148,7 +180,12 @@ Book& Book::operator=(const Book& book) {
 	author = book.author;
 	title = book.title;
 	publicationYear = book.publicationYear;
-	sphere = book.sphere;
+	if (sphereCount < book.sphereCount) {
+		delete[] spheres;
+		spheres = new String[book.sphereCount];
+	}
+	memcpy(spheres, book.spheres, book.sphereCount);
+	sphereCount = book.sphereCount;
 	currentlyAvailable = book.currentlyAvailable;
 	return *this;
 }
@@ -191,7 +228,7 @@ std::ostream& operator<<(std::ostream& out, const Book& b) {
 		std::setw(25) << b.author <<
 		std::setw(50) << b.title <<
 		std::setw(7) << b.publicationYear <<
-		std::setw(20) << b.sphere <<
+		std::setw(20) << b.spheres[0] <<
 		std::setw(7) << b.currentlyAvailable << std::endl;
 	return out;
 }
@@ -218,23 +255,33 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	}
 	Util::capitalizeFirstLetters(b.title);
 
-	int year;
-	in >> year;
-	if (in.fail())
-		throw Exception("Wrong input stream format!", 220, "Book.cpp", "Wrong publication year format");
-	if (year < 0 || year > 2020)
-		year = 1970;
-	b.publicationYear = year;
+	int num;
+	in >> num;
+	if (in.fail() || num < 0 || num > 2020)
+		throw Exception("Wrong input stream format!", 258, "Book.cpp", "Wrong publication year format");
+	b.publicationYear = num;
 	in.ignore(INT_MAX, '\n');
 
-	try {
-		getline(in, b.sphere);
+	in >> num;
+	if (in.fail() || num <= 0 || num > MAX_SPHERE_COUNT)
+		throw Exception("Wrong input stream format!", 258, "Book.cpp", "Wrong sphere count format");
+	if (b.sphereCount < num) {
+		delete[] b.spheres;
+		b.spheres = new String[num];
 	}
-	catch (Exception& e) {
-		e.setInfo("Wrong sphere format");
-		throw e;
+	b.sphereCount = num;
+	in.ignore(INT_MAX, '\n');
+
+	for (int i = 0; i < b.sphereCount; ++i) {
+		try {
+			getline(in, b.spheres[i]);
+		}
+		catch (Exception& e) {
+			e.setInfo("Wrong sphere format");
+			throw e;
+		}
+		Util::capitalizeFirstLetters(b.spheres[i]);
 	}
-	Util::capitalizeFirstLetters(b.sphere);
 
 	in >> b.currentlyAvailable;
 	if (in.fail())

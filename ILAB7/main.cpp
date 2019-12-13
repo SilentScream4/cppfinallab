@@ -203,7 +203,7 @@ void sort(T* arr, int n) {
 	}
 }
 
-/* Outputs a table to the stream &out from the books in vector &books*/
+/* Outputs a table to the stream &out from the books in vector &books. Only first sphere(discipline) is being output */
 void outputBooksTable(std::ostream& out, ResizableArray<Book>& books) {
 	out <<
 		std::setw(25) << "Author" <<
@@ -225,12 +225,16 @@ void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
 	LinkedList<String> spheres = LinkedList<String>();
 	LinkedList<int> values = LinkedList<int>();
 	for (int i = 0; i < c; ++i) {
-		int ind = spheres.findIndex(books[i].getSphere());
-		if (ind == spheres.getSize()) {
-			spheres.add(books[i].getSphere());
-			values.add(1);
+		const String* currentSpheres = books[i].getSpheres();
+		int sc = books[i].getSpheresCount();
+		for (int g = 0; g < sc; ++g) {
+			int ind = spheres.findIndex(currentSpheres[g]);
+			if (ind == spheres.getSize()) {
+				spheres.add(currentSpheres[g]);
+				values.add(1);
+			}
+			else values[ind]++;
 		}
-		else values[ind]++;
 	}
 
 	LinkedList<Pair<String, int>> sortedSpheres;
@@ -239,7 +243,7 @@ void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
 
 	sort(sortedSpheres);
 
-	out << std::setw(20) << "Covered spheres:" << std::setw(7) << "Count" << '\n';
+	out << std::setw(20) << "Covered spheres" << std::setw(7) << "Count" << '\n';
 	for (LinkedList<Pair<String, int>>::LinkedListIterator itr = sortedSpheres.begin(); itr != sortedSpheres.end(); ++itr)
 		out << std::setw(20) << (*itr).getFirst() << std::setw(7) << (*itr).getSecond() << '\n';
 }

@@ -1,28 +1,39 @@
 %HerbErt   schIldt  
    C++.   The complete Reference. 4th Edition.
 2003
+2
 Programming
+Computer Science
 10
    %HerbErt   schIldt  
    Java.   A beginner's guide. Seventh   edition.  
 2017
+3
 Programming
+Java development
+Computer Science
 8
 
 
 %    WilliAM   ShakesPEAre   
 Romeo aND juLIET
 1597
+2
 Tragedy
+Classics
 15
 
 % AlexANDER            PushKin
 Eugene Onegin
 asd
+1
 Novel
 34
 %  JaCk    LONdon
 THE STAR ROVER  
  1915
+3
   Science ficTIOn
+Romance
+Recommended
 5

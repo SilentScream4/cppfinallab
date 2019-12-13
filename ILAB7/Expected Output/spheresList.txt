@@ -1,4 +1,9 @@
-    Covered spheres:  Count
+     Covered spheres  Count
+            Classics      1
+    Computer Science      2
+    Java Development      1
          Programming      2
+         Recommended      1
+             Romance      1
      Science Fiction      1
              Tragedy      1

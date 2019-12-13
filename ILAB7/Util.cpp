@@ -49,3 +49,11 @@ void Util::strcat(char* dest, const char* source) {
 		dest[i] = source[i%l];
 	dest[i] = '\0';
 }
+
+
+template<class T>
+void Util::memcpy(T* dest, const T* source, const unsigned int size) {
+	for (int i = 0; i < size; ++i)
+		dest[i] = source[i];
+}
+

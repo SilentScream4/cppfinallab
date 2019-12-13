@@ -12,7 +12,8 @@ class Book {
 	String author;
 	String title;
 	date_y publicationYear;
-	String/*[MAX_SPHERE_COUNT] */sphere;
+	unsigned int sphereCount;
+	String* spheres;
 	unsigned int currentlyAvailable;
 
 public:
@@ -20,31 +21,34 @@ public:
 	/* Instantiates a Book with empty fields/default values */
 	Book();
 	/* Instantiates a Book with recieved arguments */
-	Book(String, String, date_y, String, unsigned int);
+	Book(String, String, date_y, unsigned int, String*, unsigned int);
 	/* Instantiates a copy of the Book @book */
 	Book(const Book&);
-
+	/* Destructor cleans up spheres memory */
+	~Book();
 	/* Returns this Book's author as a String copy */
 	String getAuthor() const;
 	/* Returns this Book's title as a String copy */
 	String getTitle() const;
 	/* Returns this Book's publication year as an integer */
 	int getPublicationYear() const;
-	/* Returns this Book's sphere as a String copy */
-	String getSphere() const;
+	/* Returns this Book's sphere count as a an integer */
+	int getSpheresCount() const;
+	/* Returns immutable pointer to spheres array */
+	const String* getSpheres() const;
 	/* Returns this Book's copy amount as an integer */
 	int getCurrentAmount() const;
 
 	/* Sets this Book's author */
-	void setAuthor(String&);
+	void setAuthor(const String&);
 	/* Sets this Book's title */
-	void setTitle(String&);
+	void setTitle(const String&);
 	/* Sets this Book's publication year */
-	void setPublicationYear(int);
-	/* Sets this Book's spehre*/
-	void setSphere(String&);
+	void setPublicationYear(const int);
+	/* Sets this Book's spheres and sphere count*/
+	void setSpheres(const String*, const int);
 	/* Sets this Book's current copy amount */
-	void setCurrentAmount(int);
+	void setCurrentAmount(const int);
 
 	/* Returns true if Books share the same author, title and publication year
    (not sphere though) */
@@ -74,7 +78,7 @@ public:
 	Book& operator=(const unsigned int);
 
 	/* Incerements the amount of available copies of this Book by 1 (postfix version) */
-	friend const Book operator++(Book& b,int);
+	friend const Book operator++(Book& b, int);
 	/* Incerements the amount of available copies of this Book by 1 (prefix version) */
 	const Book& operator++();
 
