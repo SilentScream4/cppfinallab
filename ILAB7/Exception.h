@@ -19,19 +19,19 @@ public:
 		this->info = info;
 	}
 
-	const char* getMsg() {
+	const char* getMsg() const {
 		return msg;
 	}
 
-	int getLine() {
+	int getLine() const {
 		return line;
 	}
 
-	const char* getFile() {
+	const char* getFile() const {
 		return file;
 	}
 
-	const char* getInfo() {
+	const char* getInfo() const {
 		return info;
 	}
 

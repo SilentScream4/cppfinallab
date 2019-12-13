@@ -2,11 +2,13 @@
 #include "Util.h"
 #include "Exception.h"
 
-void memcpy(String* dest, const String* source, const unsigned int size) {
-	for (int i = 0; i < size; ++i)
+void copySpheres(String* dest, const String* source, const unsigned int size) {
+	for (int i = 0; i < size; ++i) {
+		if (!Book::isValidSphere(source[i]))
+			throw Exception("Not a valid sphere name!", 8, "Book.cpp");
 		dest[i] = source[i];
+	}
 }
-
 
 #pragma region Constructors
 
@@ -29,6 +31,8 @@ Book::Book(
 	String* spheres = nullptr,
 	unsigned int currentlyAvailable = 0
 ) {
+	if (!isValidName(author))
+		throw Exception("Not a valid name!", 35, "Book.cpp");
 	this->author = author;
 	this->title = title;
 	this->publicationYear = publicationYear;
@@ -38,7 +42,7 @@ Book::Book(
 		delete[] spheres;
 		spheres = new String[sphereCount];
 	}
-	memcpy(this->spheres, spheres, sphereCount);
+	copySpheres(this->spheres, spheres, sphereCount);
 	this->sphereCount = sphereCount;
 	this->currentlyAvailable = currentlyAvailable;
 }
@@ -54,7 +58,7 @@ Book::Book(const Book& book) {
 		delete[] spheres;
 		spheres = new String[book.sphereCount];
 	}
-	memcpy(spheres, book.spheres, book.sphereCount);
+	copySpheres(spheres, book.spheres, book.sphereCount);
 	sphereCount = book.sphereCount;
 	currentlyAvailable = book.currentlyAvailable;
 }
@@ -103,6 +107,8 @@ int Book::getCurrentAmount() const {
 
 /* Sets this Book's author */
 void Book::setAuthor(const String& author) {
+	if (!isValidName(author))
+		throw Exception("Not a valid name!", 107, "Book.cpp");
 	this->author = author;
 }
 
@@ -121,7 +127,7 @@ void Book::setSpheres(const String* spheres, const int sphereCount) {
 	if (sphereCount > MAX_SPHERE_COUNT || sphereCount <= 0)
 		throw Exception("Sphere count exceeds limit!", 30, "Book.cpp");
 	this->sphereCount = sphereCount;
-	memcpy(this->spheres, spheres, sphereCount);
+	copySpheres(this->spheres, spheres, sphereCount);
 }
 
 /* Sets this Book's current copy amount */
@@ -184,7 +190,7 @@ Book& Book::operator=(const Book& book) {
 		delete[] spheres;
 		spheres = new String[book.sphereCount];
 	}
-	memcpy(spheres, book.spheres, book.sphereCount);
+	copySpheres(spheres, book.spheres, book.sphereCount);
 	sphereCount = book.sphereCount;
 	currentlyAvailable = book.currentlyAvailable;
 	return *this;
@@ -237,6 +243,8 @@ std::ostream& operator<<(std::ostream& out, const Book& b) {
    Throws invalid_argument exception if input format is invalid.*/
 std::istream& operator>>(std::istream& in, Book& b) {
 
+	String line;
+
 	try {
 		getline(in, b.author);
 	}
@@ -244,6 +252,9 @@ std::istream& operator>>(std::istream& in, Book& b) {
 		e.setInfo("Wrong author name format");
 		throw e;
 	}
+	if (!Book::isValidName(line))
+		throw Exception("Not a valid name!", 250, "Book.cpp");
+	b.author = line;
 	Util::capitalizeFirstLetters(b.author);
 
 	try {
@@ -274,12 +285,15 @@ std::istream& operator>>(std::istream& in, Book& b) {
 
 	for (int i = 0; i < b.sphereCount; ++i) {
 		try {
-			getline(in, b.spheres[i]);
+			getline(in, line);
 		}
 		catch (Exception& e) {
 			e.setInfo("Wrong sphere format");
 			throw e;
 		}
+		if (!Book::isValidSphere(line))
+			throw Exception("Not a valid sphere name", 289, "Book.cpp");
+		b.spheres[i] = line;
 		Util::capitalizeFirstLetters(b.spheres[i]);
 	}
 
@@ -289,4 +303,18 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	in.ignore(INT_MAX, '\n');
 
 	return in;
+}
+
+bool Book::isValidName(const String& name) {
+	for (int i = 0; i < name.getLength(); ++i)
+		if (!(isalpha(name[i]) || name[i] == ' ' || name[i] == '-'))
+			return false;
+	return true;
+}
+
+bool Book::isValidSphere(const String& sphere) {
+	for (int i = 0; i < sphere.getLength(); ++i)
+		if (!(isalpha(sphere[i]) || sphere[i] == ' '))
+			return false;
+	return true;
 }

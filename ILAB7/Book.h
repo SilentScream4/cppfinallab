@@ -16,6 +16,10 @@ class Book {
 	String* spheres;
 	unsigned int currentlyAvailable;
 
+	static bool isValidName(const String&); // Returns true if a string could be a valid name (consists of only alphabetic characters or '-')
+
+	static bool isValidSphere(const String&); // Return true if a string could be a valid sphere name (consists of only alphabetic characters)
+
 public:
 
 	/* Instantiates a Book with empty fields/default values */
@@ -92,5 +96,7 @@ public:
 	/* Reads Book object properties from input stream &in consecutively, each on a separate line
    Throws invalid_argument exception if input format is invalid.*/
 	friend std::istream& operator>>(std::istream& in, Book& b);
+
+	friend void copySpheres(String*, const String*, const unsigned int);
 
 };
