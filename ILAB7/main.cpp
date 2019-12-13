@@ -175,14 +175,20 @@ void sort(ResizableArray<T>& arr) {
 /* Sorts a linked list sent by a pointer in non-descending order*/
 template<typename T>
 void sort(LinkedList<T>& linkedList) {
-	if (linkedList.getSize() != 0)
-		for (typename LinkedList<T>::LinkedListIterator itr = linkedList.begin() + 1; itr < linkedList.getSize(); ++itr) {
-			T key = itr.getItem();
+	if (linkedList.getSize() != 0) {
+		typename LinkedList<T>::LinkedListIterator begin = linkedList.begin();
+		typename LinkedList<T>::LinkedListIterator end = linkedList.end();
+		for (typename LinkedList<T>::LinkedListIterator itr = begin + 1; itr != end; ++itr) {
+			T key = *itr;
 			typename LinkedList<T>::LinkedListIterator j = itr - 1;
-			for (; j >= 0 && j.getItem() > key; --j)
-				(j + 1).setItem(j.getItem());
-			(++j).setItem(key);
+			for (; j != begin && *j > key; --j)
+				(j + 1).setItem(*j);
+			if (j != begin) 
+				++j;
+			else (j+1).setItem(*j);
+			j.setItem(key);
 		}
+	}
 }
 
 /* Sorts an array sent by a pointer in non-descending order*/
@@ -219,7 +225,7 @@ void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
 	LinkedList<String> spheres = LinkedList<String>();
 	LinkedList<int> values = LinkedList<int>();
 	for (int i = 0; i < c; ++i) {
-		int ind = spheres.find(books[i].getSphere());
+		int ind = spheres.findIndex(books[i].getSphere());
 		if (ind == spheres.getSize()) {
 			spheres.add(books[i].getSphere());
 			values.add(1);
@@ -234,8 +240,8 @@ void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
 	sort(sortedSpheres);
 
 	out << std::setw(20) << "Covered spheres:" << std::setw(7) << "Count" << '\n';
-	for (LinkedList<Pair<String, int>>::LinkedListIterator itr = sortedSpheres.begin(); itr < sortedSpheres.getSize(); ++itr)
-		out << std::setw(20) << itr.getItem().getFirst() << std::setw(7) << itr.getItem().getSecond() << '\n';
+	for (LinkedList<Pair<String, int>>::LinkedListIterator itr = sortedSpheres.begin(); itr != sortedSpheres.end(); ++itr)
+		out << std::setw(20) << (*itr).getFirst() << std::setw(7) << (*itr).getSecond() << '\n';
 }
 
 // Console book output by sphere

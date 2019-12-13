@@ -15,6 +15,8 @@ class LinkedList {
 		LinkedListNode* next;
 		LinkedListNode* previous;
 
+		LinkedListNode(const LinkedListNode&); // Copy constructor disabled
+
 	public:
 
 		friend class LinkedList;
@@ -30,22 +32,14 @@ class LinkedList {
 		}
 
 		/* Instantiates a node with specified connections (connections may be null) */
-		LinkedListNode(LinkedListNode* next, LinkedListNode* previous) {
+		LinkedListNode(LinkedListNode* previous) {
 			item = nullptr;
-			this->next = next;
-			this->previous = previous;
-		}
-
-		/* Instantiates a node containing a copy of @item with specified connections (connections may be null) */
-		LinkedListNode(const T& item, LinkedListNode* next, LinkedListNode* previous) {
-			this->item = new T(item);
-			this->next = next;
+			next = nullptr;
 			this->previous = previous;
 		}
 
 #pragma endregion
 
-		/* Cleans up memory (deletes contained item if any was added) */
 		~LinkedListNode() {
 			if (item != nullptr)
 				delete item;
@@ -55,7 +49,7 @@ class LinkedList {
 
 		/* Deletes current item if any was contained and saves a copy of @item */
 		void setItem(const T& item) {
-			if (this->item != nullptr)
+			if (this->item != nullptr && this->item!=&item)
 				delete this->item;
 			this->item = new T(item);
 		}
@@ -65,27 +59,15 @@ class LinkedList {
 			return *item;
 		}
 
-		/* Sets (links) node @next as this node's next node (not vice versa) */
-		void setNext(LinkedListNode* next) {
-			this->next = next;
-		}
-
-		/* Returns this node's next node as a reference */
-		LinkedListNode& getNext() {
-			return *next;
-		}
-
-		/* Sets (links) node @previous as this node's previous node (not vice versa) */
-		void setPrevious(LinkedListNode* previous) {
-			this->previous = previous;
-		}
-
-		/* Returns this node's previous node as a reference */
-		LinkedListNode& getPrevious() {
-			return *previous;
-		}
-
 #pragma endregion
+
+		bool hasNext() {
+			return next != nullptr;
+		}
+
+		bool hasPrevious() {
+			return previous != nullptr;
+		}
 
 		/* Deletes current item if any was contained and saves a copy of @item */
 		LinkedListNode& operator=(const T& item) {
@@ -95,8 +77,8 @@ class LinkedList {
 
 	};
 
-	LinkedListNode* first;  // Linked list's first node
-	LinkedListNode* last;	// Linked list's last node
+	LinkedListNode* head;  // Linked list's first node
+	LinkedListNode* tail;	// Linked list's last node
 	int size;				// Amount of used linked nodes
 
 public:
@@ -105,22 +87,21 @@ public:
 
 	/* Instantiates an empty linked list with a single empty node */
 	LinkedList() {
-		first = new LinkedListNode();
-		last = first;
+		head = tail = new LinkedListNode();
 		size = 0;
 	}
 
 	/* Instantiates a linked list with a single node containing a copy of @item */
 	LinkedList(const T& item) {
-		first = new LinkedListNode(item, nullptr);
-		last = first;
+		head = new LinkedListNode(item, nullptr);
+		tail = new LinkedListNode(head);
 		size = 1;
 	}
 
 	/* Cleans up memory (deletes every created node). Doesn't delete nodes, that were disconnected */
 	~LinkedList() {
-		LinkedListNode* current = first;
-		LinkedListNode* previous = first;
+		LinkedListNode* current = head;
+		LinkedListNode* previous = head;
 		for (int i = 0; i < size; ++i) {
 			current = current->next;
 			delete previous;
@@ -131,15 +112,10 @@ public:
 
 	/* Adds an item to the linked list. Uses avaialable unused node or creates a new one */
 	void add(const T& item) {
-		if (size == 0) {
-			first->setItem(item);
-			++size;
-			return;
-		}
-		if (last->next == nullptr)
-			last->next = new LinkedListNode(item, nullptr, last);
-		else last->next->setItem(item);
-		last = last->next;
+		tail->setItem(item);
+		if (tail->next == nullptr)
+			tail->next = new LinkedListNode(tail);
+		tail = tail->next;
 		++size;
 	}
 
@@ -147,16 +123,15 @@ public:
 	void removeLast() {
 		if (size > 1) {
 			--size;
-			last = last->previous;
+			tail = tail->previous;
 		}
-		else if (size == 0) --size;
 	}
 
 	/* Return item contained in node at @index */
 	T& operator[](int index) {
 		if (index < 0 || index >= size)
 			throw Exception("Index out of range in linked list!", 158, "LinkedList.h");
-		LinkedListNode* atIndex = first;
+		LinkedListNode* atIndex = head;
 		for (int i = 0; i < index; ++i)
 			atIndex = atIndex->next;
 		return atIndex->getItem();
@@ -164,38 +139,49 @@ public:
 
 	/* Returns an iterator to the first node in the list */
 	LinkedListIterator begin() {
-		return LinkedListIterator(this);
+		return LinkedListIterator(head);
 	}
 
 	/* Return an iterator to the last used node in the list */
 	LinkedListIterator end() {
-		return LinkedListIterator(this, size - 1);
+		return LinkedListIterator(tail);
 	}
 
 	/* Return true if @item is present in the list */
-	bool contains(const T& item) {
-		LinkedListNode* current = first;
+	bool contains(const T& item) const {
+		LinkedListNode* current = head;
 		for (int i = 0; i < size; ++i) {
-			if (current->getItem() == item)
+			if (current->item == item)
 				return true;
-			current = &current->getNext();
+			current = current->next;
 		}
 		return false;
 	}
 
+	/* Returns iterator of @item in the list if it is present in this list. Returns end otherwise */
+	LinkedListIterator find(const T& item) const {
+		LinkedListNode* current = head;
+		for (int i = 0; i < size; ++i) {
+			if (current->item == item)
+				return LinkedListIterator(current);
+			current = current->next;
+		}
+		return end();
+	}
+
 	/* Returns index of @item in the list if it is present in this list. Returns size otherwise */
-	int find(const T& item) {
-		LinkedListNode* current = first;
+	int findIndex(const T& item) const {
+		LinkedListNode* current = head;
 		for (int i = 0; i < size; ++i) {
 			if (current->getItem() == item)
 				return i;
-			current = &current->getNext();
+			current = current->next;
 		}
 		return size;
 	}
 
 	/* Returns the amount of currently used nodes (stored items) */
-	int getSize() {
+	int getSize() const {
 		return size;
 	}
 
@@ -203,50 +189,34 @@ public:
 	   being iterated over will lead to unexpected behaviour */
 	class LinkedListIterator {
 
-		LinkedList *linkedList;
 		LinkedListNode* current;
-		int size;
-		int currentIndex;
 
 	public:
 
-		/* Creates an iterator over @linkedList at @index. By default points at the first element.
-		   Throws exception if the specified index is out of used node range in specified list */
-		LinkedListIterator(LinkedList* linkedList, int index = 0) {
-			this->linkedList = linkedList;
-			size = linkedList->size;
-			if (index >= size || index < 0)
-				throw Exception("Index out of range in linked list!", 208, "LinkedList.h");
-			currentIndex = index;
-			current = linkedList->first;
-			for (int i = 0; i < index; ++i)
-				current = &current->getNext();
+		/* Creates an iterator pointing at node */
+		LinkedListIterator(LinkedListNode* current) {
+			this->current = current;
 		}
 
 		/* Creates a copy of @iterator */
 		LinkedListIterator(const LinkedListIterator& iterator) {
-			this->linkedList = iterator.linkedList;
-			this->current = iterator.current;
-			this->size = iterator.size;
-			this->currentIndex = iterator.currentIndex;
+			current = iterator.current;
 		}
 
 		/* Postfix increment - iterates to the next node if any are left. Is out of range unsafe,
 		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator operator++(int) {
 			LinkedListIterator temp = LinkedListIterator(*this);
-			if (currentIndex >= 0 && &current->getNext() != nullptr)
-				current = &current->getNext();
-			++currentIndex;
+			if (current->hasNext())
+				current = current->next;
 			return temp;
 		}
 
 		/* Prefix increment - iterates to the next node if any are left. Is out of range unsafe,
 		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator& operator++() {
-			if (currentIndex >= 0 && &current->getNext() != nullptr)
-				current = &current->getNext();
-			++currentIndex;
+			if (current->hasNext())
+				current = current->next;
 			return *this;
 		}
 
@@ -254,37 +224,21 @@ public:
 		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator operator--(int) {
 			LinkedListIterator temp = LinkedListIterator(*this);
-			if (currentIndex < size && &current->getPrevious() != nullptr)
-				current = &current->getPrevious();
-			--currentIndex;
+			if (current->hasPrevious())
+				current = current->previous;
 			return temp;
 		}
 
-		/* Prefix decrement - iterates to the previous node if any are left. Is out of range unsafe,
+		/* Prefix decrement - iterates to the previous node if any are left. Is out of range safe,
 		   going out of range will lead to an exception if any changes to the pointed node are to be made */
 		LinkedListIterator& operator--() {
-			if (currentIndex < size && &current->getPrevious() != nullptr)
-				current = &current->getPrevious();
-			--currentIndex;
+			if (current->hasPrevious())
+				current = current->previous;
 			return *this;
 		}
 
-		/* Sets the item of the pointed node to @item. Throws an exception if iterator is out of list range */
-		void setItem(const T& item) {
-			if (currentIndex < 0 && currentIndex >= size)
-				throw Exception("Index out of list range!", 264, "LinkedList.h");
-			current->setItem(item);
-		}
-
-		/* Returns a reference to the item contained in pointed node. Throws an exception if iterator is out of list range */
-		const T& getItem() const {
-			if (currentIndex < 0 && currentIndex >= size)
-				throw Exception("Index out of list range!", 271, "LinkedList.h");
-			return current->getItem();
-		}
-
 		/* Iterates over num nodes. Is out of range unsafe */
-		LinkedListIterator operator+(const int num) {
+		LinkedListIterator operator+(const int num) const {
 			LinkedListIterator newitr = LinkedListIterator(*this);
 			for (int i = 0; i < num; ++i)
 				++newitr;
@@ -292,70 +246,33 @@ public:
 		}
 
 		/* Iterates over num nodes back. Is out of range unsafe */
-		LinkedListIterator operator-(const int num) {
+		LinkedListIterator operator-(const int num) const {
 			LinkedListIterator newitr = LinkedListIterator(*this);
 			for (int i = 0; i < num; ++i)
 				--newitr;
 			return newitr;
 		}
 
+		T& getItem() const {
+			return current->getItem();
+		}
+
+		void setItem(const T& item) const {
+			current->setItem(item);
+		}
+
 		/* Return a reference to the item contained in pointed node. Throws an exception if iterator is out of list range */
-		const T& operator*() const {
-			return getItem();
-		}
-
-#pragma region Comparison operators
-
-		// Comparison of pointers index to an integer
-
-		bool operator>(const int num) {
-			return currentIndex > num;
-		}
-
-		bool operator<(const int num) {
-			return currentIndex < num;
-		}
-
-		bool operator>=(const int num) {
-			return currentIndex >= num;
-		}
-		bool operator<=(const int num) {
-			return currentIndex <= num;
-		}
-
-		bool operator==(const int num) {
-			return currentIndex == num;
-		}
-		bool operator!=(const int num) {
-			return currentIndex != num;
-		}
-
-		// Comparison to another iterator
-
-		bool operator>(const LinkedListIterator& itr) {
-			return currentIndex > itr.currentIndex;
-		}
-
-		bool operator<(const LinkedListIterator& itr) {
-			return currentIndex < itr.currentIndex;
-		}
-
-		bool operator>=(const LinkedListIterator& itr) {
-			return currentIndex >= itr.currentIndex;
-		}
-		bool operator<=(const LinkedListIterator& itr) {
-			return currentIndex <= itr.currentIndex;
+		T& operator*() const {
+			return current->getItem();
 		}
 
 		bool operator==(const LinkedListIterator& itr) {
-			return linkedList == itr.linkedList && currentIndex == itr.currentIndex;
+			return current == itr.current;
 		}
 
 		bool operator!=(const LinkedListIterator& itr) {
-			return linkedList != itr.linkedList || currentIndex != itr.currentIndex;
+			return current != itr.current;
 		}
-
-#pragma endregion
 
 	};
 
