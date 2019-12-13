@@ -246,7 +246,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	String line;
 
 	try {
-		getline(in, b.author);
+		getline(in, line);
 	}
 	catch (Exception& e) {
 		e.setInfo("Wrong author name format");
@@ -255,7 +255,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	if (!Book::isValidName(line))
 		throw Exception("Not a valid name!", 250, "Book.cpp");
 	b.author = line;
-	Util::capitalizeFirstLetters(b.author);
+	Util::normalizeString(b.author);
 
 	try {
 		getline(in, b.title);
@@ -264,7 +264,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 		e.setInfo("Wrong title format");
 		throw e;
 	}
-	Util::capitalizeFirstLetters(b.title);
+	Util::normalizeString(b.title);
 
 	int num;
 	in >> num;
@@ -294,7 +294,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 		if (!Book::isValidSphere(line))
 			throw Exception("Not a valid sphere name", 289, "Book.cpp");
 		b.spheres[i] = line;
-		Util::capitalizeFirstLetters(b.spheres[i]);
+		Util::normalizeString(b.spheres[i]);
 	}
 
 	in >> b.currentlyAvailable;

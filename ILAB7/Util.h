@@ -7,7 +7,7 @@ namespace Util {
 	void trim(String&);
 
 	/* Removes excessive spaces, makes first letters uppercase, all others lowercase*/
-	void capitalizeFirstLetters(String&);
+	void normalizeString(String&);
 
 	/* Returns the length of a C-style string (excluding null-terminator) */
 	int strlen(const char*);

@@ -17,7 +17,7 @@ void Util::trim(String& str) {
 }
 
 /* Removes excessive spaces, makes first letters uppercase, all others lowercase*/
-void Util::capitalizeFirstLetters(String& str) {
+void Util::normalizeString(String& str) {
 	Util::trim(str);
 	for (int i = 0; i < str.getLength(); ++i) {
 		if (i == 0 || str[i - 1] == ' ')
