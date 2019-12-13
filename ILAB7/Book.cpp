@@ -30,6 +30,8 @@ Book::Book(
 
 /* Instantiates a copy of the Book @book */
 Book::Book(const Book& book) {
+	if (this == &book)
+		return;
 	author = book.author;
 	title = book.title;
 	publicationYear = book.publicationYear;
@@ -42,27 +44,27 @@ Book::Book(const Book& book) {
 #pragma region Getters
 
 /* Returns this Book's author as a String copy */
-String Book::getAuthor() {
+String Book::getAuthor() const {
 	return author;
 }
 
 /* Returns this Book's title as a String copy */
-String Book::getTitle() {
+String Book::getTitle() const {
 	return title;
 }
 
 /* Returns this Book's publication year as an integer */
-int Book::getPublicationYear() {
+int Book::getPublicationYear() const {
 	return publicationYear;
 }
 
 /* Returns this Book's sphere as a String copy */
-String Book::getSphere() {
+String Book::getSphere() const {
 	return sphere;
 }
 
 /* Returns this Book's copy amount as an integer */
-int Book::getCurrentAmount() {
+int Book::getCurrentAmount() const {
 	return currentlyAvailable;
 }
 
@@ -122,7 +124,7 @@ Book operator-(const Book& b1, const Book& b2) {
 
 /* Increments the available amount of the first Book, if the Books are the same.
    Return the first Book otherwise */
-Book Book::operator+(const Book& book) {
+Book Book::operator+(const Book& book) const {
 	if (*this != book) return *this;
 	return Book(author, title, publicationYear, sphere, currentlyAvailable + book.currentlyAvailable);
 }
@@ -135,17 +137,19 @@ bool operator<(const Book& b1, const Book& b2) {
 
 /* Return true if the first Book has more available copies
    (does not check for Book equality */
-bool Book::operator>(const Book& b) {
+bool Book::operator>(const Book& b) const {
 	return currentlyAvailable > b.currentlyAvailable;
 }
 
 /* Copies values from parameter to this Book */
-Book& Book::operator=(const Book& b) {
-	author = b.author;
-	title = b.title;
-	publicationYear = b.publicationYear;
-	sphere = b.sphere;
-	currentlyAvailable = b.currentlyAvailable;
+Book& Book::operator=(const Book& book) {
+	if (this == &book)
+		return *this;
+	author = book.author;
+	title = book.title;
+	publicationYear = book.publicationYear;
+	sphere = book.sphere;
+	currentlyAvailable = book.currentlyAvailable;
 	return *this;
 }
 

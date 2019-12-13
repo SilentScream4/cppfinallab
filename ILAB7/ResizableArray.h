@@ -38,7 +38,7 @@ public:
 
 	/* Instantiates a Resizable Array able to hold @size elements of type T
 	   filled with @size elements from *arr */
-		ResizableArray(const T* arr, const size_t size) {
+	ResizableArray(const T* arr, const size_t size) {
 		this->size = size / resizeStep + 1;
 		filled = size;
 		resize();
@@ -46,25 +46,37 @@ public:
 			arrptr[i] = arr[i];
 	}
 
+	/* Copy  constructor */
+	ResizableArray(const ResizableArray& arr) {
+		if (this == &arr)
+			return;
+		size = arr.size;
+		delete[] arrptr;
+		arrptr = new T[size];
+		filled = arr.filled;
+		for (int i = 0; i < filled; ++i)
+			arrptr[i] = arr.arrptr[i];
+	}
+
 #pragma endregion
 
 	/* Destructor returns allocated memory */
-		~ResizableArray() {
+	~ResizableArray() {
 		delete[] arrptr;
 	}
 
 	/* Returns the amount of currently stored elements */
-	int getSize() {
+	int getSize() const {
 		return filled;
 	}
 
 	/* Returns true if this Resizable Array is empty */
-	bool isEmpty() {
+	bool isEmpty() const {
 		return !filled;
 	}
 
 	/* Return true if this elem is present in this Resizable Array */
-	bool contains(const T& elem) {
+	bool contains(const T& elem) const {
 		for (int i = 0; i < filled; ++i)
 			if (arrptr[i] == elem)
 				return true;
@@ -97,6 +109,11 @@ public:
 		return elementAt(index);
 	}
 
+	/* Immutable version */
+	const T& operator[](const int index) const {
+		return elementAt(index);
+	}
+
 	friend bool operator==(const ResizableArray&, const ResizableArray&);
 
 };
@@ -105,6 +122,8 @@ public:
    and the same elements in the same oreder */
 template<class T>
 bool operator==(const ResizableArray<T>& ra1, const ResizableArray<T>& ra2) {
+	if (&ra1 == &ra2)
+		return true;
 	if (ra1.filled != ra2.filled)
 		return false;
 	for (int i = 0; i < ra1.filled; ++i)

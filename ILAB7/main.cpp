@@ -237,3 +237,6 @@ void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
 	for (LinkedList<Pair<String, int>>::LinkedListIterator itr = sortedSpheres.begin(); itr < sortedSpheres.getSize(); ++itr)
 		out << std::setw(20) << itr.getItem().getFirst() << std::setw(7) << itr.getItem().getSecond() << '\n';
 }
+
+// Console book output by sphere
+// More inputs to test

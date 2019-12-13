@@ -133,23 +133,23 @@ public:
 	void add(const T& item) {
 		if (size == 0) {
 			first->setItem(item);
-			size++;
+			++size;
 			return;
 		}
 		if (last->next == nullptr)
 			last->next = new LinkedListNode(item, nullptr, last);
 		else last->next->setItem(item);
 		last = last->next;
-		size++;
+		++size;
 	}
 
 	/* Removes last added item from the list. Doesn't clean up memory (leaves it to be reused) */
 	void removeLast() {
 		if (size > 1) {
-			size--;
+			--size;
 			last = last->previous;
 		}
-		else if (size == 0) size--;
+		else if (size == 0) --size;
 	}
 
 	/* Return item contained in node at @index */
@@ -237,7 +237,7 @@ public:
 			LinkedListIterator temp = LinkedListIterator(*this);
 			if (currentIndex >= 0 && &current->getNext() != nullptr)
 				current = &current->getNext();
-			currentIndex++;
+			++currentIndex;
 			return temp;
 		}
 
@@ -246,7 +246,7 @@ public:
 		LinkedListIterator& operator++() {
 			if (currentIndex >= 0 && &current->getNext() != nullptr)
 				current = &current->getNext();
-			currentIndex++;
+			++currentIndex;
 			return *this;
 		}
 
@@ -256,7 +256,7 @@ public:
 			LinkedListIterator temp = LinkedListIterator(*this);
 			if (currentIndex < size && &current->getPrevious() != nullptr)
 				current = &current->getPrevious();
-			currentIndex--;
+			--currentIndex;
 			return temp;
 		}
 
@@ -265,7 +265,7 @@ public:
 		LinkedListIterator& operator--() {
 			if (currentIndex < size && &current->getPrevious() != nullptr)
 				current = &current->getPrevious();
-			currentIndex--;
+			--currentIndex;
 			return *this;
 		}
 
@@ -287,7 +287,7 @@ public:
 		LinkedListIterator operator+(const int num) {
 			LinkedListIterator newitr = LinkedListIterator(*this);
 			for (int i = 0; i < num; ++i)
-				newitr++;
+				++newitr;
 			return newitr;
 		}
 
@@ -295,8 +295,13 @@ public:
 		LinkedListIterator operator-(const int num) {
 			LinkedListIterator newitr = LinkedListIterator(*this);
 			for (int i = 0; i < num; ++i)
-				newitr--;
+				--newitr;
 			return newitr;
+		}
+
+		/* Return a reference to the item contained in pointed node. Throws an exception if iterator is out of list range */
+		const T& operator*() const {
+			return getItem();
 		}
 
 #pragma region Comparison operators

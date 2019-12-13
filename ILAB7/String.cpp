@@ -13,6 +13,8 @@ String::String() {
 
 /* Parameterized constructor copies argumenent C-string */
 String::String(const char* newstr) {
+	if (newstr == str)
+		return;
 	length = newstr == nullptr ? 0 : Util::strlen(newstr);
 	str = new char[length + 1];
 	Util::strcpy(str, newstr);
@@ -20,6 +22,8 @@ String::String(const char* newstr) {
 
 /* Copy constructor copies another String */
 String::String(const String& string) {
+	if (this == &string)
+		return;
 	length = string.length;
 	str = new char[length + 1];
 	Util::strcpy(str, string.str);
@@ -32,7 +36,7 @@ String::~String() {
 }
 
 /* Returns String length without terminator */
-int String::getLength() {
+int String::getLength() const {
 	return length;
 }
 
@@ -43,6 +47,8 @@ const char* String::get() const {
 
 /* Copies C-style string recieved as a parameter */
 void String::set(const char* newstr) {
+	if (str == newstr)
+		return;
 	length = newstr == nullptr ? 0 : Util::strlen(newstr);
 	if (str != nullptr)
 		delete[] str;
@@ -122,6 +128,13 @@ bool operator!=(const String& str1, const String& str2) {
 
 /* Returns character at index */
 char& String::operator[](const int index) {
+	if (index < 0 || index > length)
+		throw Exception("Index out of range in string!", 126, "String.cpp");
+	return str[index];
+}
+
+/* Immutable version */
+const char& String::operator[](const int index) const {
 	if (index < 0 || index > length)
 		throw Exception("Index out of range in string!", 126, "String.cpp");
 	return str[index];

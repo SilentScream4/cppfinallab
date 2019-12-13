@@ -3,6 +3,8 @@
 
 #include "String.h"
 
+#define MAX_SPHERE_COUNT 5
+
 typedef unsigned short date_y;
 
 class Book {
@@ -10,7 +12,7 @@ class Book {
 	String author;
 	String title;
 	date_y publicationYear;
-	String sphere;
+	String/*[MAX_SPHERE_COUNT] */sphere;
 	unsigned int currentlyAvailable;
 
 public:
@@ -23,15 +25,15 @@ public:
 	Book(const Book&);
 
 	/* Returns this Book's author as a String copy */
-	String getAuthor();
+	String getAuthor() const;
 	/* Returns this Book's title as a String copy */
-	String getTitle();
+	String getTitle() const;
 	/* Returns this Book's publication year as an integer */
-	int getPublicationYear();
+	int getPublicationYear() const;
 	/* Returns this Book's sphere as a String copy */
-	String getSphere();
+	String getSphere() const;
 	/* Returns this Book's copy amount as an integer */
-	int getCurrentAmount();
+	int getCurrentAmount() const;
 
 	/* Sets this Book's author */
 	void setAuthor(String&);
@@ -56,14 +58,14 @@ public:
 	friend Book operator-(const Book&, const Book&);
 	/* Increments the available amount of the first Book, if the Books are the same.
    Return the first Book otherwise */
-	Book operator+(const Book&);
+	Book operator+(const Book&) const;
 
 	/* Returns true if the first Book has less available copies
    (does not check for Book equality) */
 	friend bool operator<(const Book&, const Book&);
 	/* Return true if the first Book has more available copies
    (does not check for Book equality */
-	bool operator>(const Book&);
+	bool operator>(const Book&) const;
 
 	/* Copies values from parameter to this Book */
 	Book& operator=(const Book&);

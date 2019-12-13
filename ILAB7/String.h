@@ -21,7 +21,7 @@ public:
 	~String();
 
 	/* Returns String length without terminator */
-	int getLength();
+	int getLength() const;
 
 	/* Returns C-style string (immutable) */
 	const char* get() const;
@@ -51,6 +51,9 @@ public:
 
 	/* Returns character at index */
 	char& operator[](const int index);
+
+	/* Immutable version */
+	const char& operator[](const int index) const;
 
 	/* Outputs String into stream &out */
 	friend std::ostream& operator<<(std::ostream&, const String&);
