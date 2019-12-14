@@ -127,6 +127,18 @@ int main(int argc, char** argv) {
 		fout.close();
 	}
 
+	String sphere;
+	int c = books.getSize();
+	do {
+		std::cout << "Enter sphere name to output all books with such sphere into console (enter 0 to exit): ";
+		std::cin.clear();
+		getline(std::cin, sphere);
+		for (int i = 0; i < c; ++i)
+			for (int g = 0; g < books[i].getSpheresCount(); ++g)
+				if (books[i].getSpheres()[g] == sphere)
+					std::cout << books[i];
+	} while (std::cin.fail() || sphere != "0");
+
 	return 0;
 }
 
@@ -183,9 +195,9 @@ void sort(LinkedList<T>& linkedList) {
 			typename LinkedList<T>::LinkedListIterator j = itr - 1;
 			for (; j != begin && *j > key; --j)
 				(j + 1).setItem(*j);
-			if (j != begin) 
+			if (j != begin)
 				++j;
-			else (j+1).setItem(*j);
+			else (j + 1).setItem(*j);
 			j.setItem(key);
 		}
 	}
@@ -247,6 +259,3 @@ void outputSpheresList(std::ostream& out, ResizableArray<Book>& books) {
 	for (LinkedList<Pair<String, int>>::LinkedListIterator itr = sortedSpheres.begin(); itr != sortedSpheres.end(); ++itr)
 		out << std::setw(20) << (*itr).getFirst() << std::setw(7) << (*itr).getSecond() << '\n';
 }
-
-// Console book output by sphere
-// More inputs to test
