@@ -50,7 +50,7 @@ void Util::strcat(char* dest, const char* source) {
 	dest[i] = '\0';
 }
 
-
+/* Copies @size values from array @source to array @dest. Is unsafe (doesn't make sure @dest has enough space) */
 template<class T>
 void Util::memcpy(T* dest, const T* source, const unsigned int size) {
 	for (int i = 0; i < size; ++i)

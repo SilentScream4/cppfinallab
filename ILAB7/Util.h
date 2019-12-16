@@ -18,6 +18,7 @@ namespace Util {
 	/* Appends C-style string @source at the end of @dest. Is unsafe (doesn't make sure @dest has enough space) */
 	void strcat(char*, const char*);
 
+	/* Copies @size values from array @source to array @dest. Is unsafe (doesn't make sure @dest has enough space) */
 	template<class T>
 	void memcpy(T*, const T*, const unsigned int);
 

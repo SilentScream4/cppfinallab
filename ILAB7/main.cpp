@@ -127,16 +127,23 @@ int main(int argc, char** argv) {
 		fout.close();
 	}
 
+	std::cin.ignore(INT_MAX, '\n');
 	String sphere;
 	int c = books.getSize();
+	bool isFound;
 	do {
 		std::cout << "Enter sphere name to output all books with such sphere into console (enter 0 to exit): ";
 		std::cin.clear();
 		getline(std::cin, sphere);
+		isFound = false;
 		for (int i = 0; i < c; ++i)
 			for (int g = 0; g < books[i].getSpheresCount(); ++g)
-				if (books[i].getSpheres()[g] == sphere)
+				if (books[i].getSpheres()[g] == sphere) {
 					std::cout << books[i];
+					isFound = true;
+				}
+		if (!isFound)
+			std::cout << "No books found" << std::endl;
 	} while (std::cin.fail() || sphere != "0");
 
 	return 0;
