@@ -1,9 +1,23 @@
      Covered spheres  Count
             Classics      1
-    Computer Science      2
+    Computer Science      3
+               Crime      1
+           Detective      1
+             Geology      1
+         Educational     11
+         Exploration      1
+             Fiction      3
+               Guide      1
+             History      4
     Java Development      1
-         Programming      2
+            Language      1
+           Mythology      1
+          Philosophy      2
+         Programming      5
+          Psychology      1
          Recommended      1
+            Religion      1
              Romance      1
      Science Fiction      1
+             Science      5
              Tragedy      1

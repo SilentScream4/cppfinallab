@@ -36,7 +36,7 @@ Book::Book(
 	this->author = author;
 	this->title = title;
 	this->publicationYear = publicationYear;
-	if (sphereCount > MAX_SPHERE_COUNT || sphereCount == 0)
+	if (sphereCount > BOOK_MAX_SPHERE_COUNT || sphereCount == 0)
 		throw Exception("Sphere count exceeds limit or must be at least 1!", 30, "Book.cpp");
 	if (this->sphereCount < sphereCount) {
 		delete[] spheres;
@@ -124,7 +124,7 @@ void Book::setPublicationYear(const int year) {
 
 /* Sets this Book's spehre*/
 void Book::setSpheres(const String* spheres, const int sphereCount) {
-	if (sphereCount > MAX_SPHERE_COUNT || sphereCount <= 0)
+	if (sphereCount > BOOK_MAX_SPHERE_COUNT || sphereCount <= 0)
 		throw Exception("Sphere count exceeds limit!", 30, "Book.cpp");
 	this->sphereCount = sphereCount;
 	copySpheres(this->spheres, spheres, sphereCount);
@@ -231,11 +231,11 @@ const Book& Book::operator--() {
 /* Outputs information about this Book into the stream &out as table row */
 std::ostream& operator<<(std::ostream& out, const Book& b) {
 	out <<
-		std::setw(25) << b.author <<
-		std::setw(50) << b.title <<
-		std::setw(7) << b.publicationYear <<
-		std::setw(20) << b.spheres[0] <<
-		std::setw(7) << b.currentlyAvailable << std::endl;
+		std::setw(BOOK_AUTHOR_WIDTH) << Book::trimToSize(b.author, BOOK_AUTHOR_WIDTH - 1) <<
+		std::setw(BOOK_TITLE_WIDTH) << Book::trimToSize(b.title, BOOK_TITLE_WIDTH - 1) << // -1 to leave space between columns
+		std::setw(BOOK_YEAR_WIDTH) << b.publicationYear <<
+		std::setw(BOOK_SPHERE_WIDTH) << Book::trimToSize(b.spheres[0], BOOK_SPHERE_WIDTH - 1) <<
+		std::setw(BOOK_COUNT_WIDTH) << b.currentlyAvailable << std::endl;
 	return out;
 }
 
@@ -274,7 +274,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 	in.ignore(INT_MAX, '\n');
 
 	in >> num;
-	if (in.fail() || num <= 0 || num > MAX_SPHERE_COUNT)
+	if (in.fail() || num <= 0 || num > BOOK_MAX_SPHERE_COUNT)
 		throw Exception("Wrong input stream format!", 258, "Book.cpp", "Wrong sphere count format");
 	if (b.sphereCount < num) {
 		delete[] b.spheres;
@@ -307,7 +307,7 @@ std::istream& operator>>(std::istream& in, Book& b) {
 
 bool Book::isValidName(const String& name) {
 	for (int i = 0; i < name.getLength(); ++i)
-		if (!(isalpha(name[i]) || name[i] == ' ' || name[i] == '-'))
+		if (!(isalpha(name[i]) || name[i] == ' ' || name[i] == '-' || name[i] == '.'))
 			return false;
 	return true;
 }
@@ -317,4 +317,22 @@ bool Book::isValidSphere(const String& sphere) {
 		if (!(isalpha(sphere[i]) || sphere[i] == ' '))
 			return false;
 	return true;
+}
+
+String Book::trimToSize(const String& string, const unsigned int size) {
+	if (string.getLength() < size)
+		return string;
+	char* str = new char[size + 1];
+	int i;
+	for (i = 0; i < string.getLength() && i < size - 3; ++i)
+		str[i] = string[i];
+	if (i < string.getLength()) {
+		str[i++] = '.';
+		str[i++] = '.';
+		str[i++] = '.';
+	}
+	str[i] = '\0';
+	String ret = str;
+	delete[] str;
+	return ret;
 }

@@ -1,5 +1,19 @@
                    Author                                             Title   Year              Sphere  Count
+              Ugo Bianchi                          The History Of Religions   1975             History      3
+           R Marjoribanks Geological Methods In Mineral Exploration And ...   2012             Geology      3
               Jack London                                    The Star Rover   1915     Science Fiction      5
+                R. Morgan                                     Greek Fiction   1994           Mythology      5
+         Martin Preistman           The Camridge Companion To Crime Fiction   2003             Science      5
+           Rick Arrington Crime Prevention: The Law Enforcement Officer'...   2006               Guide      6
           Herbert Schildt        Java. A Beginner's Guide. Seventh Edition.   2017         Programming      8
           Herbert Schildt         C++. The Complete Reference. 4th Edition.   2003         Programming     10
       William Shakespeare                                  Romeo And Juliet   1597             Tragedy     15
+                 M Allaby                Exploration: New Lands, New Worlds   2010         Exploration     34
+             Ian Mc Bride              History And Memory In Modern Ireland   2001             History     35
+              Dylan Jones                     Practical Goal Of Programming   2010         Educational     35
+          Simon Blackburn               The Oxford Dictionary Of Philosophy   2016          Philosophy     46
+           Gilles Deleuze                               What Is Philosophy?   1994          Philosophy     67
+                 O Gracia       Bilingual Education: An Introductory Reader   2007            Language     75
+        Stephen G. Kochan                                  Programming In C   2004         Programming     78
+         Charlez Pertzold Code: The Hidden Language Of Computer Hardware...   2000    Computer Science     89
+        Patrick H. Hutton                       History As An Art Of Memory   1993             History    138

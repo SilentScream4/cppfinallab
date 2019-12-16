@@ -3,7 +3,12 @@
 
 #include "String.h"
 
-#define MAX_SPHERE_COUNT 5
+#define BOOK_MAX_SPHERE_COUNT 5
+#define BOOK_AUTHOR_WIDTH 25
+#define BOOK_TITLE_WIDTH 50
+#define BOOK_YEAR_WIDTH 7
+#define BOOK_SPHERE_WIDTH 20
+#define BOOK_COUNT_WIDTH 7
 
 typedef unsigned short date_y;
 
@@ -19,6 +24,8 @@ class Book {
 	static bool isValidName(const String&); // Returns true if a string could be a valid name (consists of only alphabetic characters or '-')
 
 	static bool isValidSphere(const String&); // Return true if a string could be a valid sphere name (consists of only alphabetic characters)
+
+	static String trimToSize(const String&, const unsigned int); // Returns trimmed string to fit in size
 
 public:
 
