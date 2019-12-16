@@ -1,0 +1,147 @@
+%HerbErt   schIldt  
+   C++.   The complete Reference. 4th Edition.
+2003
+2
+Programming
+Computer Science
+10
+   %HerbErt   schIldt  
+   Java.   A beginner's guide. Seventh   edition.  
+2017
+3
+Programming
+Java development
+Computer Science
+8
+
+
+%    WilliAM   ShakesPEAre   
+Romeo aND juLIET
+1597
+2
+Tragedy
+Classics
+15
+
+% AlexANDER            PushKin
+Eugene Onegin
+asd
+1
+Novel
+34
+%  JaCk    LONdon
+THE STAR ROVER  
+ 1915
+3
+  Science ficTIOn
+Romance
+Recommended
+5
+%R. Morgan
+Greek Fiction
+1994
+3
+Mythology
+Science
+Fiction
+5
+% Martin preiSTman
+The camridge companion to crime   fiction
+2003
+3
+Science
+Fiction
+Detective
+5
+%Rick arringtON
+crime prevention: the law enforcement officer's practical     guide
+2006
+3
+Guide
+Educational
+Crime
+6
+%Patrick h. hutton
+History as an art of   memory
+1993
+4
+History
+Educational
+Science
+Psychology
+138
+%Ian Mc Bride
+History and memory in modern ireland
+2001
+2
+History
+Educational
+35
+%Ugo Bianchi
+The history   of   religions  
+1975
+3
+History
+Educational
+Religion
+3
+%Charlez pertzold
+Code: the hidden language of computer hardware and software
+2000
+4
+Computer Science
+Science
+Programming
+Educational
+89
+%Dylan jones
+practical goal of programming
+2010
+2
+Educational
+Programming
+35
+%Stephen g. kochan
+Programming in C
+2004
+2
+Programming
+Educational
+78
+%simon blackburn
+the oxford dictionary of philosophy
+2016
+3
+Philosophy
+Educational
+Science
+46
+%gilles deleuze
+what is philosophy?
+1994
+2
+Philosophy
+Educational
+67
+%o gracia
+bilingual education: an introductory reader
+2007
+2
+Language
+Educational
+75
+%r marjoribanks
+Geological methods in mineral exploration and mining
+2012
+2
+Geology
+Educational
+3
+%m allaby
+Exploration: new lands, new worlds
+2010
+3
+Exploration
+Fiction
+History
+34
